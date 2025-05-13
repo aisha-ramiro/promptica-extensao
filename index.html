@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promptica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Promptica</h1>
+
+    <button id="novoPrompt">Criar Novo Prompt</button>
+
+    <div id="checklist" class="hidden">
+      <label>Instruções:</label><textarea id="instrucao"></textarea>
+      <label>Exemplos:</label><textarea id="exemplo"></textarea>
+      <label>Contexto:</label><textarea id="contexto"></textarea>
+      <label>Restrições:</label><textarea id="restricoes"></textarea>
+      <label>Tom:</label><textarea id="tom"></textarea>
+      <label>Saída:</label><textarea id="saida"></textarea>
+      <label>Conteúdo de Suporte:</label><textarea id="suporte"></textarea>
+      <button id="gerar">Gerar Prompt</button>
+    </div>
+
+    <div id="resultado" class="hidden">
+      <h2>Meu Prompt</h2>
+      <pre id="output"></pre>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)">Copiar</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
