@@ -1,30 +1,79 @@
 body {
-  font-family: sans-serif;
-  padding: 16px;
-  background: #f5f5ff;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9ff;
+  padding: 20px;
 }
 
 .container {
-  max-width: 400px;
+  max-width: 500px;
   margin: auto;
+}
+
+h1 {
+  text-align: center;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.card {
+  border-radius: 12px;
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 textarea {
   width: 100%;
-  height: 60px;
-  margin-bottom: 10px;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  font-family: inherit;
 }
 
-button {
+label {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-btn {
   background-color: #92AAEF;
-  color: #fff;
+  color: white;
+  padding: 10px 15px;
   border: none;
-  padding: 10px;
-  margin: 5px 0;
+  border-radius: 8px;
+  margin-top: 10px;
   cursor: pointer;
-  border-radius: 6px;
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.main-btn:hover {
+  background-color: #728bde;
+}
+
+pre {
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.95em;
+  white-space: pre-wrap;
 }
 
 .hidden {
   display: none;
 }
+
+/* Cores dos cards */
+.lilac       { background-color: #DDCBFF; }
+.pink        { background-color: #EDC0FF; }
+.light-pink  { background-color: #FFBBE6; }
+.peach       { background-color: #FFD6C5; }
+.blue        { background-color: #92AAEF; }
+.green       { background-color: #ADE466; }
+.yellow      { background-color: #FFDA68; }

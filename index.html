@@ -5,23 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Promptica</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Promptica</h1>
+    <h1>✨ Promptica</h1>
 
-    <button id="novoPrompt">Criar Novo Prompt</button>
+    <button id="novoPrompt" class="main-btn">Criar Novo Prompt <i class="fas fa-magic"></i></button>
 
     <div id="checklist" class="hidden">
-      <label>Instruções:</label><textarea id="instrucao"></textarea>
-      <label>Exemplos:</label><textarea id="exemplo"></textarea>
-      <label>Contexto:</label><textarea id="contexto"></textarea>
-      <label>Restrições:</label><textarea id="restricoes"></textarea>
-      <label>Tom:</label><textarea id="tom"></textarea>
-      <label>Saída:</label><textarea id="saida"></textarea>
-      <label>Conteúdo de Suporte:</label><textarea id="suporte"></textarea>
-      <button id="gerar">Gerar Prompt</button>
+      <div class="card lilac">
+        <label>Instruções <i class="fas fa-info-circle"></i></label>
+        <textarea id="instrucao" placeholder="Ex: Liste três vantagens..."></textarea>
+      </div>
+
+      <div class="card pink">
+        <label>Exemplos <i class="fas fa-info-circle"></i></label>
+        <textarea id="exemplo" placeholder="Ex: Entrada: A / Saída: B"></textarea>
+      </div>
+
+      <div class="card light-pink">
+        <label>Contexto <i class="fas fa-info-circle"></i></label>
+        <textarea id="contexto" placeholder="Ex: Você é um professor de IA..."></textarea>
+      </div>
+
+      <div class="card peach">
+        <label>Restrições <i class="fas fa-info-circle"></i></label>
+        <textarea id="restricoes" placeholder="Ex: Sem termos técnicos..."></textarea>
+      </div>
+
+      <div class="card blue">
+        <label>Tom <i class="fas fa-info-circle"></i></label>
+        <textarea id="tom" placeholder="Ex: Informal, profissional, cômico..."></textarea>
+      </div>
+
+      <div class="card green">
+        <label>Saída <i class="fas fa-info-circle"></i></label>
+        <textarea id="saida" placeholder="Ex: Lista com 5 tópicos..."></textarea>
+      </div>
+
+      <div class="card yellow">
+        <label>Conteúdo de Suporte <i class="fas fa-info-circle"></i></label>
+        <textarea id="suporte" placeholder="Ex: Use o relatório anexo como base..."></textarea>
+      </div>
+
+      <button id="gerar" class="main-btn">Gerar Prompt <i class="fas fa-terminal"></i></button>
     </div>
+
+    <div id="resultado" class="hidden">
+      <h2>📝 Meu Prompt</h2>
+      <pre id="output"></pre>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)" class="main-btn">
+        <i class="fas fa-copy"></i> Copiar
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
     <div id="resultado" class="hidden">
       <h2>Meu Prompt</h2>
