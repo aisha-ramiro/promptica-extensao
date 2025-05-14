@@ -5,73 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Promptica</title>
   <link rel="stylesheet" href="style.css" />
-
 </head>
+
 <body>
-  <div class="container">
+  
+<!-- Página Inicial -->
+  <div id="telaInicial">
     <h1>Promptica</h1>
-
-    <button id="novoPrompt" class="main-btn">Criar Novo Prompt <i class="fas fa-magic"></i></button>
-
-    <div id="checklist" class="hidden">
-      <div class="card lilac">
-        <label>Instruções <i class="fas fa-info-circle"></i></label>
-        <textarea id="instrucao" placeholder="Ex: Liste três vantagens..."></textarea>
-      </div>
-
-      <div class="card pink">
-        <label>Exemplos <i class="fas fa-info-circle"></i></label>
-        <textarea id="exemplo" placeholder="Ex: Entrada: A / Saída: B"></textarea>
-      </div>
-
-      <div class="card light-pink">
-        <label>Contexto <i class="fas fa-info-circle"></i></label>
-        <textarea id="contexto" placeholder="Ex: Você é um professor de IA..."></textarea>
-      </div>
-
-      <div class="card peach">
-        <label>Restrições <i class="fas fa-info-circle"></i></label>
-        <textarea id="restricoes" placeholder="Ex: Sem termos técnicos..."></textarea>
-      </div>
-
-      <div class="card blue">
-        <label>Tom <i class="fas fa-info-circle"></i></label>
-        <textarea id="tom" placeholder="Ex: Informal, profissional, cômico..."></textarea>
-      </div>
-
-      <div class="card green">
-        <label>Saída <i class="fas fa-info-circle"></i></label>
-        <textarea id="saida" placeholder="Ex: Lista com 5 tópicos..."></textarea>
-      </div>
-
-      <div class="card yellow">
-        <label>Conteúdo de Suporte <i class="fas fa-info-circle"></i></label>
-        <textarea id="suporte" placeholder="Ex: Use o relatório anexo como base..."></textarea>
-      </div>
-
-      <button id="gerar" class="main-btn">Gerar Prompt <i class="fas fa-terminal"></i></button>
-    </div>
-
-    <div id="resultado" class="hidden">
-      <h2>Meu Prompt</h2>
-      <pre id="output"></pre>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)" class="main-btn">
-        <i class="fas fa-copy"></i> Copiar
-      </button>
-    </div>
+    <button class="main-btn" id="novoPrompt">Criar Novo Prompt</button>
+    <button class="main-btn" id="novoPrompt">Meu Histórico</button>
+    <button class="main-btn" id="novoPrompt">Login</button>
   </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
-
-    <div id="resultado" class="hidden">
-      <h2>Meu Prompt</h2>
-      <pre id="output"></pre>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)">Copiar</button>
+<!-- Página Criar Novo Prompt -->
+  <div id="checklist" class="hidden">
+    <div class="card lilac">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Instruções</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="instrucao" rows="3" placeholder="Dê instruções claras..."></textarea>
+      </div>
     </div>
+
+    <div class="card pink">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Exemplos</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="exemplo" rows="3" placeholder="Inclua exemplos relevantes..."></textarea>
+      </div>
+    </div>
+
+    <div class="card light-pink">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Contexto</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="contexto" rows="3" placeholder="Descreva o contexto..."></textarea>
+      </div>
+    </div>
+
+    <div class="card peach">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Restrições</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="restricoes" rows="3" placeholder="Defina limitações ou proibições..."></textarea>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Tom</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="tom" rows="3" placeholder="Formal, criativo, objetivo..."></textarea>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Saída esperada</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="saida" rows="3" placeholder="Especifique o formato da resposta..."></textarea>
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-header">
+        <input type="checkbox" />
+        <div class="card-title">Conteúdo adicional</div>
+        <button class="accordion-toggle"><i>▼</i></button>
+      </div>
+      <div class="card-content">
+        <textarea id="suporte" rows="3" placeholder="Fontes, links, referências..."></textarea>
+      </div>
+    </div>
+
+    <button id="gerar" class="main-btn">Gerar Prompt</button>
   </div>
 
-  <script src="script.js"></script>
+<!-- Página Resultado -->
+  <div id="resultado" class="hidden">
+    <h1>Prompt Gerado</h1>
+    <pre id="output"></pre>
+    <button class="main-btn" id="voltar">Voltar</button>
+  </div>
+
+<script src="script.js"></script>
 </body>
 </html>
