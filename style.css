@@ -1,56 +1,90 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f9f9ff;
+  background: #F5F5F5;
   padding: 20px;
-}
-
-.container {
-  max-width: 500px;
-  margin: auto;
+  margin: 0;
+  width: 360px;
 }
 
 h1 {
   text-align: center;
   color: #444;
+  font-size: 20px;
   margin-bottom: 20px;
 }
 
 .card {
-  border-radius: 12px;
-  padding: 10px;
-  margin: 10px 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 16px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  gap: 10px;
+  padding: 8px
+}
+
+.card-title {
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.accordion-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
+
+.accordion-toggle i {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.accordion-toggle.rotated i {
+  transform: rotate(180deg);
+}
+
+.card-content {
+  display: none;
+
+}
+
+.card-content.show {
+  display: block;
 }
 
 textarea {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 6px;
+  height: 100%;
+  padding: 10px;
+  margin-top: 3px;
+  border-radius: 0px 0px 8px 8px;
   border: 1px solid #ccc;
   resize: vertical;
   font-family: inherit;
-}
-
-label {
-  font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .main-btn {
   background-color: #92AAEF;
   color: white;
-  padding: 10px 15px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
-  margin-top: 10px;
+  margin-top: 15px;
   cursor: pointer;
   display: block;
   width: 100%;
   font-weight: bold;
-  transition: background 0.2s;
+  font-size: 14px;
 }
 
 .main-btn:hover {
@@ -63,6 +97,7 @@ pre {
   border-radius: 10px;
   font-size: 0.95em;
   white-space: pre-wrap;
+  overflow-x: auto;
 }
 
 .hidden {
@@ -70,10 +105,10 @@ pre {
 }
 
 /* Cores dos cards */
-.lilac       { background-color: #DDCBFF; }
-.pink        { background-color: #EDC0FF; }
-.light-pink  { background-color: #FFBBE6; }
-.peach       { background-color: #FFD6C5; }
-.blue        { background-color: #92AAEF; }
-.green       { background-color: #ADE466; }
-.yellow      { background-color: #FFDA68; }
+.lilac       { background-color: #E7DAFF; }
+.pink        { background-color: #F3DAFF; }
+.light-pink  { background-color: #FFDAE9; }
+.peach       { background-color: #FFE5DA; }
+.blue        { background-color: #FFF0DA; }
+.green       { background-color: #F4FFDA; }
+.yellow      { background-color: #DAFFE2; }
