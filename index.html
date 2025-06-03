@@ -13,12 +13,24 @@
   <div id="telaInicial">
     <h1>Promptica</h1>
     <button class="main-btn" id="novoPrompt">Criar Novo Prompt</button>
-    <button class="main-btn" id="novoPrompt">Meu Histórico</button>
-    <button class="main-btn" id="novoPrompt">Login</button>
+    <button class="main-btn" id="meusPrompts">Meus Prompts</button>
+    <button class="main-btn" id="login">Login</button>
   </div>
 
 <!-- Página Criar Novo Prompt -->
+
+
   <div id="checklist" class="hidden">
+    
+    <div class="header">
+      <button id="backFromChecklist" class="back-btn">
+        Voltar
+      </button>
+      <span class="header-title">Criar Novo Prompt</span>
+      <button>
+        User
+      </button>
+    </div>
     <div class="card lilac">
       <div class="card-header">
         <input type="checkbox" />
@@ -101,10 +113,156 @@
 
 <!-- Página Resultado -->
   <div id="resultado" class="hidden">
-    <h1>Prompt Gerado</h1>
+    <div class="header">
+      <button id="backFromResult" class="back-btn">
+        Voltar
+      </button>
+      <span class="header-title">Meu Prompt</span>
+      <button>
+        User
+      </button>
+    </div>
     <pre id="output"></pre>
     <button class="main-btn" id="voltar">Voltar</button>
   </div>
+
+
+<!-- HISTÓRICO -->
+  <div id="historico-screen" class="hidden">
+    <div class="header">
+      <button id="backFromHistorico" class="back-btn"><i class="fas fa-arrow-left"></i></button>
+      <span class="header-title">Meus Prompts</span>
+      <i class="fas fa-user-circle" style="margin-left:auto; font-size: 20px; color:#666;"></i>
+    </div>
+  
+    <div class="historico-top">
+      <label><input type="checkbox" id="selectAllPrompts" /> Selecionar tudo</label>
+      <span class="icon-btn"><i class="fas fa-trash-alt"></i></span>
+    </div>
+  
+    <div class="prompt-list">
+      <!-- Exemplo de item -->
+      <div class="prompt-item">
+        <input type="checkbox" class="prompt-checkbox" />
+        <div class="prompt-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
+        </div>
+        <div class="prompt-actions">
+          <a href="#" class="visualizarPrompt">Visualizar</a> / 
+          <a href="#" class="editarPrompt">Editar</a>
+        </div>
+      </div>
+  
+      <!-- Copie mais blocos desses conforme necessário -->
+    </div>
+  </div>
+
+  <!-- =========================
+     HISTÓRICO DE PROMPTS - VISUALIZAR INDIVIDUAL
+     ========================= -->
+<div id="visualizar-prompt-screen" class="hidden">
+  <div class="header">
+    <button id="backFromVisualizar" class="back-btn"><i class="fas fa-arrow-left"></i></button>
+    <span class="header-title">Meus Prompts</span>
+    <i class="fas fa-user-circle" style="margin-left:auto; font-size: 20px; color:#666;"></i>
+  </div>
+
+  <div class="prompt-box">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+    </p>
+    <p>
+      Dali essa obra deve se aprofundar na verdade que ultrapassa a ideologia da moral pública. Blá blá blá. Copie, edite ou exclua este prompt.
+    </p>
+  </div>
+
+  <div class="prompt-toolbar">
+    <button class="icon-btn blue"><i class="fas fa-copy"></i></button>
+    <button class="icon-btn lilac"><i class="fas fa-pen"></i></button>
+    <button class="icon-btn pink"><i class="fas fa-undo"></i></button>
+    <button class="icon-btn peach"><i class="fas fa-trash"></i></button>
+  </div>
+</div>
+
+
+
+  <!-- =========================
+     LOGIN SCREEN
+     ========================= -->
+<div id="login-screen" class="hidden">
+  <div class="header">
+    <button id="backFromLogin" class="back-btn">
+      Voltar
+    </button>
+    <span class="header-title">Login</span>
+    <button>User</button>
+  </div>
+
+  <div class="login-form">
+    <button class="social-btn">
+      <i class="fab fa-google"></i> Entrar com o Google
+    </button>
+    <div class="divider">ou faça Login</div>
+
+    <label for="email">Endereço de e-mail</label>
+    <input type="email" id="email" placeholder="exemplo@email.com" />
+
+    <label for="password">Senha</label>
+    <input type="password" id="password" placeholder="Sua senha" />
+
+    <div class="login-options">
+      <label><input type="checkbox" /> Manter-se conectado</label>
+      <a href="#" class="link-right">Esqueceu a senha?</a>
+    </div>
+
+    <button id="btnLogin" class="main-btn">Entrar</button>
+
+    <p class="text-center">
+      Não possui uma conta? <a href="#" id="goToCadastro">Cadastrar-se</a>
+    </p>
+  </div>
+</div>
+
+<!-- =========================
+     CADASTRO SCREEN
+     ========================= -->
+<div id="cadastro-screen" class="hidden">
+  <div class="header">
+    <button id="backFromCadastro" class="back-btn">
+      Voltar
+    </button>
+    <span class="header-title">Cadastro</span>
+    <button>User</button>
+  </div>
+
+  <div class="login-form">
+    <div class="input-row">
+      <div>
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" />
+      </div>
+      <div>
+        <label for="sobrenome">Sobrenome</label>
+        <input type="text" id="sobrenome" />
+      </div>
+    </div>
+
+    <label for="emailCadastro">Email</label>
+    <input type="email" id="emailCadastro" />
+
+    <label for="nascimento">Data de Nascimento</label>
+    <input type="date" id="nascimento" />
+
+    <label for="telefone">Número de celular</label>
+    <input type="tel" id="telefone" placeholder="(11) 99999-9999" />
+
+    <label for="senhaCadastro">Senha</label>
+    <input type="password" id="senhaCadastro" placeholder="********" />
+
+    <button id="btnCadastro" class="main-btn">Cadastrar</button>
+  </div>
+</div>
+
 
 <script src="script.js"></script>
 </body>
