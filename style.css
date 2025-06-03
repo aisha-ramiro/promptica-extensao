@@ -25,7 +25,16 @@ h1 {
   justify-content: space-between;
   cursor: pointer;
   gap: 10px;
-  padding: 8px
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #444;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .card-title {
@@ -112,3 +121,142 @@ pre {
 .blue        { background-color: #FFF0DA; }
 .green       { background-color: #F4FFDA; }
 .yellow      { background-color: #DAFFE2; }
+
+
+
+/* LOGIN E CADASTRO */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.login-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: #fff;
+  width: 100%;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.link-right {
+  color: #728bde;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.link-right:hover {
+  text-decoration: underline;
+}
+
+.divider {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.text-center {
+  text-align: center;
+  font-size: 14px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.input-row > div {
+  flex: 1;
+}
+
+/* Histórico - Lista de Prompts */
+.historico-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.prompt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.prompt-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.prompt-item input[type="checkbox"] {
+  margin-bottom: 5px;
+}
+
+.prompt-text {
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.prompt-actions {
+  font-size: 13px;
+  color: #444;
+}
+
+.prompt-actions a {
+  color: #728bde;
+  text-decoration: none;
+}
+
+.prompt-actions a:hover {
+  text-decoration: underline;
+}
+
+/* Visualização Individual */
+.prompt-box {
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.prompt-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.icon-btn {
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+}
+
+.icon-btn.blue { background: #92AAEF; }
+.icon-btn.lilac { background: #DDCBFF; color: #333; }
+.icon-btn.pink { background: #FFBBE6; color: #333; }
+.icon-btn.peach { background: #FFD6C5; color: #333; }
