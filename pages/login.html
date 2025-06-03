@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Login – Promptica</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <button id="backHome" class="back-btn">&lt;</button>
+    <h1 class="title">Login</h1>
+  </header>
+
+  <!-- FORM -->
+  <div class="form-box">
+    <button id="googleBtn" class="google-btn">🍀  Entre com o Google</button>
+    <div class="divider"><span>Ou faça Login</span></div>
+
+    <label>E-mail</label>
+    <input id="loginEmail" type="email" placeholder="exemplo@email.com">
+
+    <label>Senha</label>
+    <input id="loginSenha" type="password" placeholder="********">
+
+    <div class="row-between">
+      <label class="inline"><input type="checkbox" id="staySigned"> Mantenha conectado</label>
+      <a href="#" class="link">Esqueceu a senha?</a>
+    </div>
+
+    <button id="btnEntrar" class="primary-btn">Entrar</button>
+
+    <p class="small">Não possui conta? <a id="goCadastro" href="#">Cadastrar-se</a></p>
+  </div>
+
+  <script src="../scripts/login.js"></script>
+</body></html>

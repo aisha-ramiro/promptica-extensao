@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Promptica",
+  "description": "Auxilia na criação de prompts para IA",
   "version": "1.0",
-  "description": "Construa prompts claros para IA com um checklist guiado.",
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "pages/home.html"
   },
   "permissions": ["storage"]
 }

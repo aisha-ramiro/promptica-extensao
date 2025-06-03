@@ -1,0 +1,14 @@
+/* ---------- HEADER ---------- */
+.topbar{
+  position:absolute;top:0;left:0;width:100%;height:48px;
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border-bottom:1px solid #ddd;padding:0 12px;
+}
+.back-btn{background:none;border:0;font-size:20px;cursor:pointer}
+.title{flex:1;font-size:20px;font-weight:700;margin:0}
+.user-btn{background:#000;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
+
+.sub{margin:64px 0 8px;text-align:center;font-weight:700}
+.accordion{padding:0 24px;display:flex;flex-direction:column;gap:12px}
+details{background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;font-size:14px}
+details summary{cursor:pointer;font-weight:700}

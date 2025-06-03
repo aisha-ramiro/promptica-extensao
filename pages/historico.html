@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Meus Prompts</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/historico.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <button id="voltarHome" class="back-btn">&lt;</button>
+    <h1 class="title">Meus Prompts</h1>
+    <button class="user-btn">User</button>
+  </header>
+
+  <!-- BARRA DE AÇÕES -->
+  <div class="bar">
+    <label><input type="checkbox" id="selectAll"> Selecionar tudo</label>
+    <button id="deleteSelected" class="delete-btn">🗑️</button>
+  </div>
+
+  <!-- LISTA -->
+  <ul id="listaPrompts" class="prompt-list">
+    <!-- dois exemplos fixos -->
+    <li class="prompt-item">
+      <input type="checkbox" class="prompt-check">
+      <div class="preview">Como criar API em Node.js com Express e autenticação JWT…</div>
+      <div class="links">
+        <a href="#" class="view">Visualizar</a> |
+        <a href="#" class="edit">Editar</a>
+      </div>
+    </li>
+
+    <li class="prompt-item">
+      <input type="checkbox" class="prompt-check">
+      <div class="preview">Explique para crianças como funciona a energia solar…</div>
+      <div class="links">
+        <a href="#" class="view">Visualizar</a> |
+        <a href="#" class="edit">Editar</a>
+      </div>
+    </li>
+  </ul>
+
+  <script src="../scripts/historico.js"></script>
+</body></html>

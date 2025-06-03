@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar novo prompt</title>
+
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/checklist.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <button id="voltarHome" class="back-btn">&lt; Voltar</button>
+    <h1 class="title">Criar novo prompt</h1>
+    <button id="userBtn" class="user-btn">User</button>
+  </header>
+
+  <!-- WRAPPER COM SCROLL INTERNO -->
+  <div class="list-wrapper">
+
+    <!-- CARD -->
+    <section class="card lilac" data-info="Técnica que organiza o prompt para deixar as orientações claras">
+      <div class="card-head">
+        <label><input type="checkbox"> Instruções</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: Liste três vantagens de usar APIs…"></textarea>
+      </div>
+    </section>
+
+    <section class="card pink"  data-info="Mostre pares de entrada/saída para orientar o modelo">
+      <div class="card-head">
+        <label><input type="checkbox"> Exemplos</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: Entrada: 🍎 → Saída: apple"></textarea>
+      </div>
+    </section>
+
+    <section class="card light-pink" data-info="Defina papel do modelo ou cenário de uso">
+      <div class="card-head">
+        <label><input type="checkbox"> Contexto</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: Você é um professor de IA…"></textarea>
+      </div>
+    </section>
+
+    <section class="card peach" data-info="Limite escopo ou tamanho da resposta">
+      <div class="card-head">
+        <label><input type="checkbox"> Restrições</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: Máx. 100 palavras; Sem termos técnicos"></textarea>
+      </div>
+    </section>
+
+    <section class="card yellow" data-info="Escolha informal, formal, etc.">
+      <div class="card-head">
+        <label><input type="checkbox"> Tom</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: Tom descontraído, amigável…"></textarea>
+      </div>
+    </section>
+
+    <section class="card green" data-info="Explique o formato desejado para a resposta">
+      <div class="card-head">
+        <label><input type="checkbox"> Saída</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder="Ex.: JSON com chaves title, desc…"></textarea>
+      </div>
+    </section>
+
+    <section class="card mint" data-info="Dados extra: datas, links, preferências…">
+      <div class="card-head">
+        <label><input type="checkbox"> Conteúdo de Suporte</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea placeholder='Ex.: "Use o contexto de dezembro/24"'></textarea>
+      </div>
+    </section>
+
+  </div><!-- /list-wrapper -->
+
+  <!-- BOTÃO FINAL -->
+  <button id="criarPrompt" class="primary-btn">Criar Prompt</button>
+
+  <script src="../scripts/checklist.js"></script>
+</body></html>

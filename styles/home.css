@@ -1,0 +1,78 @@
+/* ---------- RESET DO POPUP ---------- */
+html,body{
+  width:400px;
+  height:620px;
+  margin:0;padding:0;
+  overflow:hidden;         /* <-- remove scroll */
+  background:#f5f5fa;
+  font-family:system-ui;
+  box-sizing:border-box;
+}
+
+/* ---------- HEADER ---------- */
+.topbar{
+  position:absolute;
+  top:0;left:0;
+  width:95%;
+  height:48px;             /* altura fixa */
+  display:flex;justify-content:space-between;align-items:center;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  padding:0 16px;
+}
+.logo{
+    margin:0;
+    font-size:22px;
+    font-weight:600;
+    padding: 5px;
+}
+
+.user-btn{
+  background:#000;color:#fff;
+  border:0;
+  border-radius:6px;
+  padding:6px 14px;
+  margin: 5px 10px;
+  font-size:14px;
+  cursor:pointer
+}
+
+/* ---------- ÁREA CENTRAL (botões) ---------- */
+.home-wrapper{
+  position:absolute;
+  top:48px;                /* abaixo do header */
+  bottom:40px;             /* acima do footer */
+  left:0;right:0;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;  /* centro vertical */
+  align-items:center;      /* centro horizontal */
+  gap:28px;
+  overflow:hidden;         /* evita scroll interno */
+  padding:0 24px;
+}
+.home-btn{
+  width:240px;
+  padding:14px 0;
+  border:0;border-radius:8px;
+  font-weight:700;font-size:15px;
+  cursor:pointer;color:#000;
+}
+
+
+/* ---------- FOOTER (ajuda) ---------- */
+.help{
+  position:absolute;
+  bottom:0;left:0;
+  width:100%;height:40px;
+  display:flex;justify-content:center;align-items:center;
+  font-size:13px;color:#444;
+}
+.help a{font-weight:700;text-decoration:none;color:#000}
+
+/*BOTOES*/
+
+.home-btn.blue   {background:var(--btn-blue);}
+.home-btn.purple {background:var(--btn-purple);}
+.home-btn.pink   {background:var(--btn-pink);}
