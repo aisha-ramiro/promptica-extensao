@@ -260,3 +260,99 @@ pre {
 .icon-btn.lilac { background: #DDCBFF; color: #333; }
 .icon-btn.pink { background: #FFBBE6; color: #333; }
 .icon-btn.peach { background: #FFD6C5; color: #333; }
+
+/* ============================
+   MINHA CONTA
+   ============================ */
+.user-box {
+  text-align: center;
+  margin: 20px 0 10px;
+}
+
+.user-icon {
+  font-size: 50px;
+  color: #888;
+}
+
+.user-box h2 {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.user-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.user-options button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.user-options i {
+  margin-right: 8px;
+}
+
+.user-options .tag {
+  font-size: 13px;
+  color: #728bde;
+  font-weight: bold;
+}
+
+/* ============================
+   EDITAR PERFIL
+   ============================ */
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.input-row > div {
+  flex: 1;
+}
+
+/* ============================
+   AJUDA E SUPORTE
+   ============================ */
+#ajuda-suporte h4 {
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+/* ============================
+   FALE CONOSCO
+   ============================ */
+#fale-conosco .card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  padding: 12px;
+  font-weight: 500;
+}
+
+/* ============================
+   POLÍTICA DE PRIVACIDADE
+   ============================ */
+#politica-privacidade .prompt-box h4 {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#politica-privacidade .prompt-box p {
+  font-size: 14px;
+  margin-top: 4px;
+  color: #333;
+}
+
