@@ -3,8 +3,15 @@
   "name": "Promptica",
   "description": "Auxilia na criação de prompts para IA",
   "version": "1.0",
-  "action": {
-    "default_popup": "pages/home.html"
-  },
-  "permissions": ["storage"]
+
+  "action": { "default_popup": "pages/home.html" },
+
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
