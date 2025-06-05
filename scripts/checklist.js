@@ -1,6 +1,20 @@
 // scripts/checklist.js
 document.addEventListener("DOMContentLoaded", () => {
 
+  const draftRaw = localStorage.getItem("draftPromptica");
+if (draftRaw) {
+  const d = JSON.parse(draftRaw);
+  Object.keys(d).forEach(k => {
+    if (k.endsWith("Chk")) {
+      const chk = document.getElementById(k.replace("Chk","") + "Check");
+      if (chk) chk.checked = d[k];
+    } else {
+      const ta = document.getElementById(k);
+      if (ta)  ta.value = d[k];
+    }
+  });
+}
+
   /* ──────────── NAVEGAÇÃO ──────────── */
   voltarHome.onclick = () => location.href = "home.html";
   userBtn  .onclick = () => location.href = "usuario.html";
@@ -78,6 +92,13 @@ ${valor("exemplo")}`
 
     const promptFinal = partes.join("\n\n");   // junta com linha em branco
     localStorage.setItem("promptGerado", promptFinal);
-    location.href = "resultado.html";
+    const draft = {};
+["instrucao","exemplo","contexto","restricoes","tom","saida","suporte"].forEach(id=>{
+  draft[id]       = valor(id);
+  draft[id+"Chk"] = marcado(id);
+});
+localStorage.setItem("draftPromptica", JSON.stringify(draft));
+
+location.href = "resultado.html";
   };
 });

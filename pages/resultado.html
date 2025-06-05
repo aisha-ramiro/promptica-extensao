@@ -10,7 +10,7 @@
 <body>
   <!-- HEADER -->
   <header class="topbar">
-    <button id="backFromResult" class="back-btn">&lt;</button>
+    <button id="btnVoltarTopo" class="back-btn">&lt;</button>
     <h1 class="title">Meu Prompt</h1>
     <button id="userBtn" class="user-btn">User</button>
   </header>
@@ -20,13 +20,17 @@
     <pre id="output" class="prompt-box"></pre>
   </div>
 
+  <button id="btnSalvar" class="save-btn">Salvar</button>
+
   <!-- BOTÕES DE AÇÃO -->
   <div class="toolbar">
-    <button class="icon-btn blue"   id="btnCopy">📋</button>
-    <button class="icon-btn purple" id="btnEdit">✏️</button>
-    <button class="icon-btn pink"   id="btnBack">↩️</button>
-    <button class="icon-btn peach"  id="btnDelete">🗑️</button>
+    <button class="icon-btn blue"   id="btnCopiar">📋</button>
+    <button class="icon-btn purple" id="btnEditar">✏️</button>
+    <button class="icon-btn pink"   id="btnVoltar">↩️</button>
+    <button class="icon-btn peach"  id="btnExcluir">🗑️</button>
   </div>
+
+  <div id="toast" class="toast hidden"></div>
 
   <script src="../scripts/resultado.js"></script>
 </body></html>

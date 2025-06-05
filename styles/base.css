@@ -22,3 +22,20 @@ html,body{
   --btn-yellow: #ffda68;
   --btn-lilac:  #ddcbff;
 }
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#333;
+  color:#fff;
+  padding:8px 16px;
+  border-radius:10px;
+  font-size:14px;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+  z-index:9999;
+  opacity:.9;
+  transition:opacity .3s;
+}
+.toast.hidden{display:none;}
