@@ -16,7 +16,7 @@
 }
 .back-btn{background:none;border:0;font-size:16px;cursor:pointer}
 .title{flex:1 1 auto;font-size:18px;font-weight:700;margin:0}
-.user-btn{background:#000;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
+.user-btn{background:#fff;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
 
 /* ---------- LISTA COM SCROLL ---------- */
 .list-wrapper{
@@ -29,6 +29,9 @@
   border-radius:8px;padding:0;background:var(--card-lilac);
   box-shadow:0 1px 3px rgba(0,0,0,.1);
   transition:all .25s;
+  position: relative;       /* cria contexto para tooltip */
+  overflow: visible;        /* NÃO recorta o balão */
+
 }
 .card.pink{background:var(--card-pink)}
 .card.light-pink{background:var(--card-light-pink)}
@@ -54,6 +57,19 @@
   position:absolute;left:50%;top:-5px;transform:translate(-50%,-100%);
   background:#000;color:#fff;font-size:12px;padding:6px 8px;border-radius:4px;
   white-space:normal;min-width:160px;max-width:180px;
+}
+
+.info[data-tooltip]::after{
+  /* layout básico que você já tinha */
+  position: absolute;
+  top: -0.5rem;
+  /* -------- novo -------- */
+  right: 100%;              /* encosta na borda direita do ícone       */
+  left: auto;               /* desfaz 'left:0' se houver               */
+  transform: translateX(-8px); /* afasta 8 px para dentro do cartão  */
+  white-space: normal;      /* quebra linha, evita extrapolar largura  */
+  max-width: 240px;         /* limite opcional                          */
+  z-index: 10;
 }
 
 .toggle{background:none;border:0;font-size:16px;cursor:pointer}

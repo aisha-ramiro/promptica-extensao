@@ -10,16 +10,16 @@
 <body>
   <!-- HEADER -->
   <header class="topbar">
-    <button id="voltarHome" class="back-btn">&lt; Voltar</button>
+    <button id="voltarHome" class="back-btn"><img width="25" height="25" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/></button>
     <h1 class="title">Criar novo prompt</h1>
-    <button id="userBtn" class="user-btn">User</button>
+    <button id="userBtn" class="user-btn"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/user-male-circle.png" alt="user-male-circle"/></button>
   </header>
 
   <!-- WRAPPER COM SCROLL INTERNO -->
   <div class="list-wrapper">
 
     <!-- CARD -->
-    <section class="card lilac" data-info="Técnica que organiza o prompt para deixar as orientações claras">
+    <section class="card lilac" data-info="Orientam o modelo sobre a tarefa a ser realizada, especificando o que fazer.">
       <div class="card-head">
         <label><input type="checkbox" id="instrucaoCheck"> Instruções</label>
         <span class="info">i</span>
@@ -30,7 +30,7 @@
       </div>
     </section>
 
-    <section class="card pink"  data-info="Mostre pares de entrada/saída para orientar o modelo">
+    <section class="card pink"  data-info="Apresentam pares de entrada e saída esperados, mostrando ao modelo o comportamento ou formato ideal para a tarefa definida.">
       <div class="card-head">
         <label><input id="exemploCheck" type="checkbox"> Exemplos</label>
         <span class="info">i</span>
@@ -41,7 +41,7 @@
       </div>
     </section>
 
-    <section class="card light-pink" data-info="Defina papel do modelo ou cenário de uso">
+    <section class="card light-pink" data-info="Define o papel do modelo e o cenário, como 'Você é um professor de Inglês básico">
       <div class="card-head">
         <label><input id="contextoCheck" type="checkbox"> Contexto</label>
         <span class="info">i</span>
@@ -52,7 +52,7 @@
       </div>
     </section>
 
-    <section class="card peach" data-info="Limite escopo ou tamanho da resposta">
+    <section class="card peach" data-info="Limitam a resposta em termos de extensão ou escopo,como 'Sem incluir opiniões. Sem termos técnicos.'">
       <div class="card-head">
         <label><input id="restricoesCheck" type="checkbox"> Restrições</label>
         <span class="info">i</span>
@@ -63,7 +63,7 @@
       </div>
     </section>
 
-    <section class="card yellow" data-info="Escolha informal, formal, etc.">
+    <section class="card yellow" data-info="Define qual será o tom da resposta, como 'Tom formal e acadêmico', 'Tom informal para redes sociais'">
       <div class="card-head">
         <label><input id="tomCheck" type="checkbox"> Tom</label>
         <span class="info">i</span>
@@ -74,7 +74,7 @@
       </div>
     </section>
 
-    <section class="card green" data-info="Explique o formato desejado para a resposta">
+    <section class="card green" data-info="Especifica a forma da resposta como 'Apresente no formato JSON' ou 'Faça uma lista enumerada'.">
       <div class="card-head">
         <label><input id="saidaCheck" type="checkbox"> Saída</label>
         <span class="info">i</span>
@@ -85,7 +85,7 @@
       </div>
     </section>
 
-    <section class="card mint" data-info="Dados extra: datas, links, preferências…">
+    <section class="card mint" data-info="Dados extras que ajudam a tarefa como datas ou preferências, por exemplo 'Use a documentação oficial' ou 'Baseado nos eventos de 1995'">
       <div class="card-head">
         <label><input id="suporteCheck" type="checkbox"> Conteúdo de Suporte</label>
         <span class="info">i</span>
