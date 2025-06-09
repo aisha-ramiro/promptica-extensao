@@ -14,8 +14,13 @@
 
   <!-- FORM -->
   <div class="form-box">
-    <button id="googleBtn" class="google-btn">🍀  Entre com o Google</button>
-    <div class="divider"><span>Ou faça Login</span></div>
+    <button id="googleLogin" class="social-btn">
+  <img src="../assets/google.svg" height="18" style="vertical-align:middle">
+  Entrar com o Google
+</button>
+<p id="loginStatus" class="text-center"></p>
+
+<script type="module" src="../scripts/login.js"></script>
 
     <label>E-mail</label>
     <input id="loginEmail" type="email" placeholder="exemplo@email.com">
@@ -34,4 +39,21 @@
   </div>
 
   <script src="../scripts/login.js"></script>
+  <script type="module">
+  import { onUserReady } from "../scripts/auth.js";
+
+  onUserReady(user => {
+    const avatar = document.getElementById("userBtn");
+    const headerName = document.getElementById("userName");
+
+    if (user) {
+      avatar.textContent = ""; // limpa texto "User"
+      avatar.style.backgroundImage = `url(${user.picture})`;
+      headerName.textContent = `Olá, ${user.name.split(" ")[0]}!`;
+    } else {
+      avatar.textContent = "Login";
+      headerName.textContent = "";
+    }
+  });
+</script>
 </body></html>
