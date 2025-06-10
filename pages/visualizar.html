@@ -1,33 +1,36 @@
 <!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <title>Meus Prompts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Prompt</title>
+
   <link rel="stylesheet" href="../styles/base.css">
   <link rel="stylesheet" href="../styles/visualizar.css">
 </head>
 <body>
+  <!-- HEADER -->
   <header class="topbar">
-    <button id="voltarLista" class="back-btn">&lt;</button>
-    <h1 class="title">Meus Prompts</h1>
-    <button class="user-btn">User</button>
+    <button id="btnVoltarTopo" class="back-btn"><img width="25" height="25" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/></button>
+    <h1 class="title">Meu Prompt</h1>
+    <button id="userBtn" class="user-btn"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/user-male-circle.png" alt="user-male-circle"/></button>
   </header>
 
-  <!-- PREVIEW -->
-  <div class="prompt-box-wrapper">
-    <pre class="prompt-box">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua…
-
-(Exemplo fixo; depois carregamos dinamicamente.)
-    </pre>
+  <!-- ÁREA DO TEXTO -->
+  <div class="prompt-wrapper">
+    <pre  class="prompt-box">Como criar API em Node.js com Express e autenticação JWT…</pre>
   </div>
 
-  <!-- AÇÕES (sem função ainda) -->
+  <button id="btnSalvar" class="save-btn">Salvar</button>
+
+  <!-- BOTÕES DE AÇÃO -->
   <div class="toolbar">
-    <button class="icon-btn blue">📋</button>
-    <button class="icon-btn purple">✏️</button>
-    <button class="icon-btn pink">↩️</button>
-    <button class="icon-btn peach">🗑️</button>
+    <button class="icon-btn blue"   id="btnCopiar"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/copy.png" alt="copy"/></button>
+    <button class="icon-btn purple" id="btnEditar"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/edit--v1.png" alt="edit--v1"/></button>
+    <button class="icon-btn pink"   id="btnVoltar"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/undo.png" alt="undo"/></button>
+    <button class="icon-btn peach"  id="btnExcluir"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/trash--v1.png" alt="trash--v1"/></button>
   </div>
 
-  <script src="../scripts/visualizar.js"></script>
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="../scripts/resultado.js"></script>
 </body></html>

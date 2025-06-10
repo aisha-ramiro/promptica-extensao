@@ -1,3 +1,5 @@
+/* herda fixos 460×700 do base.css */
+
 /* ---------- HEADER ---------- */
 .topbar{
   position:absolute;top:0;left:0;width:100%;height:48px;
@@ -6,24 +8,31 @@
 }
 .back-btn{background:none;border:0;font-size:20px;cursor:pointer}
 .title{flex:1;font-size:20px;font-weight:700;margin:0}
-.user-btn{background:#000;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
+.user-btn{background:#fff;color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
 
-.prompt-box-wrapper{
-  position:absolute;top:64px;bottom:140px;left:0;right:0;
-  display:flex;justify-content:center;align-items:center;padding:0 24px;
+/* ---------- BOX COM SCROLL ---------- */
+.prompt-wrapper{
+  position:absolute;top:64px;left:0;right:0;bottom:120px;
+  display:flex;justify-content:center;align-items:center;
+  padding:0 24px;
 }
 .prompt-box{
-  width:100%;height:100%;background:#fff;border:2px solid #ccc;border-radius:6px;
-  padding:16px;overflow:auto;white-space:pre-wrap;font-size:14px;
+  width:100%;height:100%;
+  background:#fff;border:2px solid #ccc;border-radius:6px;
+  padding:16px;box-sizing:border-box;
+  overflow:auto;font-size:14px;white-space:pre-wrap;
 }
+
+/* ---------- TOOLBAR ---------- */
 .toolbar{
   position:absolute;bottom:24px;left:0;right:0;
-  display:flex;justify-content:center;gap:28px
+  display:flex;justify-content:center;gap:28px;
 }
 .icon-btn{
-  width:60px;height:60px;border:0;border-radius:12px;font-size:28px;line-height:60px;text-align:center;cursor:pointer;
+  width:60px;height:60px;border:0;border-radius:12px;cursor:pointer;
+  font-size:28px;line-height:60px;text-align:center;color:#000;
 }
 .icon-btn.blue   {background:var(--btn-blue);}
 .icon-btn.purple {background:var(--btn-purple);}
 .icon-btn.pink   {background:var(--btn-pink);}
-.icon-btn.peach  {background:var(--card-peach);}
+.icon-btn.peach  {background:var(--btn-peach);}  /* já definido em checklist */

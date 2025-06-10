@@ -13,47 +13,35 @@
   </header>
 
   <!-- FORM -->
+<div class="login-box">
   <div class="form-box">
     <button id="googleLogin" class="social-btn">
-  <img src="../assets/google.svg" height="18" style="vertical-align:middle">
+      <img width="25" height="25" src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo"/>
   Entrar com o Google
 </button>
+
 <p id="loginStatus" class="text-center"></p>
 
-<script type="module" src="../scripts/login.js"></script>
+<div class="do-login">
+  <img width="50" height="50" src="https://img.icons8.com/ios/50/horizontal-line.png" alt="horizontal-line"/>
+  <p>Ou faça login</p>
 
-    <label>E-mail</label>
-    <input id="loginEmail" type="email" placeholder="exemplo@email.com">
+  <img width="50" height="50" src="https://img.icons8.com/ios/50/horizontal-line.png" alt="horizontal-line"/>
+</div>
 
-    <label>Senha</label>
-    <input id="loginSenha" type="password" placeholder="********">
+    <input id="loginEmail" type="email" placeholder="Endereço de e-mail">
+    <input id="loginSenha" type="password" placeholder="Senha">
 
     <div class="row-between">
-      <label class="inline"><input type="checkbox" id="staySigned"> Mantenha conectado</label>
+     <div class="connect"><input type="checkbox" id="staySigned"> Mantenha conectado</label></div>
       <a href="#" class="link">Esqueceu a senha?</a>
     </div>
 
     <button id="btnEntrar" class="primary-btn">Entrar</button>
 
-    <p class="small">Não possui conta? <a id="goCadastro" href="#">Cadastrar-se</a></p>
-  </div>
+    <p class="small">Não possui conta? <a id="goCadastro" href="cadastro.html">Cadastrar-se</a></p>
+</div>
 
-  <script src="../scripts/login.js"></script>
-  <script type="module">
-  import { onUserReady } from "../scripts/auth.js";
+</div>
 
-  onUserReady(user => {
-    const avatar = document.getElementById("userBtn");
-    const headerName = document.getElementById("userName");
-
-    if (user) {
-      avatar.textContent = ""; // limpa texto "User"
-      avatar.style.backgroundImage = `url(${user.picture})`;
-      headerName.textContent = `Olá, ${user.name.split(" ")[0]}!`;
-    } else {
-      avatar.textContent = "Login";
-      headerName.textContent = "";
-    }
-  });
-</script>
 </body></html>

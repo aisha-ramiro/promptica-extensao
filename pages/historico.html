@@ -8,38 +8,45 @@
 <body>
   <!-- HEADER -->
   <header class="topbar">
-    <button id="voltarHome" class="back-btn">&lt;</button>
+    <button id="voltarHome" class="back-btn"><img width="25" height="25" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/></button>
     <h1 class="title">Meus Prompts</h1>
-    <button class="user-btn">User</button>
+    <button class="user-btn"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/user-male-circle.png" alt="user-male-circle"/></button>
   </header>
 
   <!-- BARRA DE AÇÕES -->
   <div class="bar">
-    <label><input type="checkbox" id="selectAll"> Selecionar tudo</label>
-    <button id="deleteSelected" class="delete-btn">🗑️</button>
+    <label><input type="checkbox" id="selectAll"> Selecionar tudo    | </label>
+    <button id="deleteSelected" class="delete-btn"><img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/trash--v1.png" alt="trash--v1"/></button>
   </div>
 
   <!-- LISTA -->
   <ul id="listaPrompts" class="prompt-list">
     <!-- dois exemplos fixos -->
     <li class="prompt-item">
-      <input type="checkbox" class="prompt-check">
-      <div class="preview">Como criar API em Node.js com Express e autenticação JWT…</div>
+      <div class="prompt-box">
+        <input type="checkbox" class="prompt-check">
+        <div class="preview">Como criar API em Node.js com Express e autenticação JWT…</div>
+      </div>
+      
       <div class="links">
-        <a href="#" class="view">Visualizar</a> |
-        <a href="#" class="edit">Editar</a>
+        <a href="./visualizar.html" class="view">Visualizar</a> |
+        <a href="#" class="edit">Excluir</a>
       </div>
     </li>
 
     <li class="prompt-item">
-      <input type="checkbox" class="prompt-check">
-      <div class="preview">Explique para crianças como funciona a energia solar…</div>
+      <div class="prompt-box">
+        <input type="checkbox" class="prompt-check">
+        <div class="preview">Explique para crianças como funciona a energia solar…</div>
+      </div>
+      
       <div class="links">
-        <a href="#" class="view">Visualizar</a> |
-        <a href="#" class="edit">Editar</a>
+        <a href="./visualizar.html" class="view">Visualizar</a> |
+        <a href="#" class="edit">Excluir</a>
       </div>
     </li>
   </ul>
+  
 
   <script src="../scripts/historico.js"></script>
 </body></html>
