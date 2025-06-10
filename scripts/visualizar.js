@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  voltarLista.onclick = () => history.back();
+  btnVoltarTopo.onclick = () => location.href = "historico.html";
+  userBtn.onclick     = () => location.href = "usuario.html"; // página de usuário
+
 });
 
 copy.onclick = async () => {

@@ -3,6 +3,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const googleBtn = document.getElementById("googleLogin");
   const statusEl  = document.getElementById("loginStatus");
+  
+  backHome.onclick =()=> location.href="home.html";
+
+
 
   const clientId = chrome.runtime.getManifest().oauth2.client_id;
   const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`;
