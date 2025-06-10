@@ -25,15 +25,30 @@ gap: 10px;}
 
 
 /* ----- LISTAS ----- */
-.menu{list-style:none;margin:0 32px 18px;padding:0}
-.menu li{margin-bottom:8px}
+.menu{list-style:none;margin:0 32px 18px;padding:0;border-radius: 10px;}
+
 .menu button{
-  width:100%;display:flex;justify-content:space-between;align-items:center;
+  width:100%;display:flex;
   padding:10px 14px;font-size:14px;cursor:pointer;
-  background:#fff;border:1px solid #ccc;border-radius:8px
+  border:none;
+  background-color: #fff;
+  border-radius: 5px;
 }
 .menu span{margin-right:10px}
 .menu em{color:var(--btn-purple);font-style:normal}
+
+.menu li button{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu li button span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
 
 /* ----- BOTÃO SAIR ----- */
 .logout-btn{
