@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar novo prompt</title>
+
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/checklist.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <button id="voltarHome" class="back-btn"><img width="25" height="25" src="https://img.icons8.com/ios-filled/50/back.png" alt="back"/></button>
+    <h1 class="title">Criar novo prompt</h1>
+    <button id="userBtn" class="user-btn"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/user-male-circle.png" alt="user-male-circle"/></button>
+  </header>
+
+  <!-- WRAPPER COM SCROLL INTERNO -->
+  <div class="list-wrapper">
+
+    <!-- CARD -->
+    <section class="card lilac" data-info="Orientam o modelo sobre a tarefa a ser realizada, especificando o que fazer.">
+      <div class="card-head">
+        <label><input type="checkbox" id="instrucaoCheck"> Instruções</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="instrucao" placeholder="Ex.: Liste três vantagens de usar APIs…"></textarea>
+      </div>
+    </section>
+
+    <section class="card pink"  data-info="Apresentam pares de entrada e saída esperados, mostrando ao modelo o comportamento ou formato ideal para a tarefa definida.">
+      <div class="card-head">
+        <label><input id="exemploCheck" type="checkbox"> Exemplos</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="exemplo" placeholder="Ex.: Entrada: 🍎 → Saída: apple"></textarea>
+      </div>
+    </section>
+
+    <section class="card light-pink" data-info="Define o papel do modelo e o cenário, como 'Você é um professor de Inglês básico">
+      <div class="card-head">
+        <label><input id="contextoCheck" type="checkbox"> Contexto</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="contexto" placeholder="Ex.: Você é um professor de IA…"></textarea>
+      </div>
+    </section>
+
+    <section class="card peach" data-info="Limitam a resposta em termos de extensão ou escopo,como 'Sem incluir opiniões. Sem termos técnicos.'">
+      <div class="card-head">
+        <label><input id="restricoesCheck" type="checkbox"> Restrições</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="restricoes" placeholder="Ex.: Máx. 100 palavras; Sem termos técnicos"></textarea>
+      </div>
+    </section>
+
+    <section class="card yellow" data-info="Define qual será o tom da resposta, como 'Tom formal e acadêmico', 'Tom informal para redes sociais'">
+      <div class="card-head">
+        <label><input id="tomCheck" type="checkbox"> Tom</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="tom" placeholder="Ex.: Tom descontraído, amigável…"></textarea>
+      </div>
+    </section>
+
+    <section class="card green" data-info="Especifica a forma da resposta como 'Apresente no formato JSON' ou 'Faça uma lista enumerada'.">
+      <div class="card-head">
+        <label><input id="saidaCheck" type="checkbox"> Saída</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="saida" placeholder="Ex.: JSON com chaves title, desc…"></textarea>
+      </div>
+    </section>
+
+    <section class="card mint" data-info="Dados extras que ajudam a tarefa como datas ou preferências, por exemplo 'Use a documentação oficial' ou 'Baseado nos eventos de 1995'">
+      <div class="card-head">
+        <label><input id="suporteCheck" type="checkbox"> Conteúdo de Suporte</label>
+        <span class="info">i</span>
+        <button class="toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <textarea id="suporte" placeholder='Ex.: "Use o contexto de dezembro/24"'></textarea>
+      </div>
+    </section>
+
+  </div><!-- /list-wrapper -->
+
+  <!-- BOTÃO FINAL -->
+  <button id="criarPrompt" class="primary-btn">Criar Prompt</button>
+
+<script type="module" src="../scripts/checklist.js"></script>
+</body></html>

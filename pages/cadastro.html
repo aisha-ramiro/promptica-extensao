@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Cadastro – Promptica</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/cadastro.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="topbar">
+    <button id="backLogin" class="back-btn">&lt;</button>
+    <h1 class="title">Cadastro</h1>
+  </header>
+
+  <!-- INFO ERRO -->
+  <p id="msgObrig" class="msg hidden">* Campos obrigatórios</p>
+
+  <!-- FORM -->
+  <div class="form-box">
+    <div class="row2">
+      <div><label>* Nome</label><input id="nome" required></div>
+      <div><label>Sobrenome</label><input id="sobrenome"></div>
+    </div>
+
+    <label>* E-mail</label>
+    <input id="email" type="email" required>
+
+    <label>Data de Nascimento</label>
+    <input id="nascimento" type="date">
+
+    <label>Número de celular</label>
+    <input id="fone" placeholder="(11) 99999-9999">
+
+    <label>* Senha</label>
+    <input id="senha" type="password" required>
+
+    <button id="btnCadastrar" class="primary-btn">Cadastrar</button>
+  </div>
+
+  <script src="../scripts/cadastro.js"></script>
+</body></html>

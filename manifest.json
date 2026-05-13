@@ -1,15 +1,26 @@
 {
   "manifest_version": 3,
   "name": "Promptica",
-  "version": "1.0",
-  "description": "Construa prompts claros para IA com um checklist guiado.",
-  "action": {
-    "default_popup": "index.html"
+  "description": "Auxilia na criação de prompts para IA",
+  "version": "1.1",
+
+  "action": { "default_popup": "pages/home.html" },
+
+  "oauth2": {
+    "client_id": "800958394568-loknfvchnhp6k6ccovpj8tjvhhb17ta3.apps.googleusercontent.com",
+    "scopes": [
+      "openid",
+      "email",
+      "profile"
+    ]
   },
-  "permissions": ["storage"],
+  "permissions": ["identity", "storage"],
   "host_permissions": [
     "https://generativelanguage.googleapis.com/*",
     "https://gemini.googleapis.com/*",
     "https://*.supabase.co/*"
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
