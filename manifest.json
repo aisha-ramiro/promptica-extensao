@@ -9,6 +9,7 @@
   "permissions": ["storage"],
   "host_permissions": [
     "https://generativelanguage.googleapis.com/*",
-    "https://gemini.googleapis.com/*"
+    "https://gemini.googleapis.com/*",
+    "https://*.supabase.co/*"
   ]
 }

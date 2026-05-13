@@ -3,7 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // UTILITÁRIO PARA TROCAR TELAS
   // =====================================
   const STORAGE_KEY = "prompticaHistory";
+  const SUPABASE_SESSION_KEY = "prompticaSupabaseSession";
   const GEMINI_API_KEY = window.GEMINI_API_KEY || "";
+  const SUPABASE_URL = window.SUPABASE_URL || "";
+  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
+  const SUPABASE_PROMPTS_TABLE = window.SUPABASE_PROMPTS_TABLE || "prompts";
+  const SUPABASE_PROMPTS_DATA_COLUMN = window.SUPABASE_PROMPTS_DATA_COLUMN || "";
+  const SUPABASE_PROFILES_TABLE = window.SUPABASE_PROFILES_TABLE || "profiles";
   const PRIMARY_MODEL = "gemini-3-flash-preview";
   const FALLBACK_MODEL = "gemini-2.5-flash-lite";
   const GENERATIVE_LANGUAGE_BASES = [
@@ -17,17 +23,414 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   let historyData = [];
   let currentPromptData = null;
+  let supabaseSession = null;
+  let currentUser = null;
+  let currentProfile = null;
+  let screenHistory = [];
+  let currentScreen = "telaInicial";
 
-  function mostrarTela(telaId) {
-    document.querySelectorAll(
+  function normalizeSupabaseUrl(url) {
+    if (!url) return "";
+    return url.replace(/\/rest\/v1\/?$/, "").replace(/\/$/, "");
+  }
+
+  function supabaseApiUrl(path) {
+    const base = normalizeSupabaseUrl(SUPABASE_URL);
+    return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+  }
+
+  function getSupabaseSession() {
+    const raw = localStorage.getItem(SUPABASE_SESSION_KEY);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      console.warn("Erro ao ler sessão Supabase:", error);
+      return null;
+    }
+  }
+
+  function saveSupabaseSession(session) {
+    if (!session) {
+      localStorage.removeItem(SUPABASE_SESSION_KEY);
+      return;
+    }
+    localStorage.setItem(SUPABASE_SESSION_KEY, JSON.stringify(session));
+  }
+
+  function clearSupabaseSession() {
+    supabaseSession = null;
+    currentUser = null;
+    localStorage.removeItem(SUPABASE_SESSION_KEY);
+  }
+
+  function getSupabaseHeaders(useAuth = true) {
+    const headers = {
+      apikey: SUPABASE_ANON_KEY,
+      Accept: "application/json"
+    };
+    if (useAuth && supabaseSession && supabaseSession.access_token) {
+      headers.Authorization = `Bearer ${supabaseSession.access_token}`;
+    }
+    headers["Content-Type"] = "application/json";
+    return headers;
+  }
+
+  async function initSupabase() {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      return;
+    }
+    supabaseSession = getSupabaseSession();
+    currentUser = supabaseSession?.user || null;
+    updateHomeButtonsVisibility();
+    if (currentUser) {
+      await loadUserProfile();
+      await loadPromptsFromSupabase();
+    }
+  }
+
+  async function signInSupabase(email, password) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error("Configuração do Supabase não definida.");
+    }
+
+    const response = await fetch(supabaseApiUrl("/auth/v1/token?grant_type=password"), {
+      method: "POST",
+      headers: getSupabaseHeaders(false),
+      body: JSON.stringify({ email, password })
+    });
+
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error_description || result.error || "Falha ao autenticar no Supabase.");
+    }
+
+    const authData = result.user ? result : (result.data || result);
+    if (!authData.user) {
+      throw new Error("Falha ao autenticar: resposta de login inválida.");
+    }
+
+    supabaseSession = authData;
+    currentUser = authData.user;
+    saveSupabaseSession(authData);
+    updateHomeButtonsVisibility();
+    await loadUserProfile();
+    await loadPromptsFromSupabase();
+  }
+
+  async function signUpSupabase(email, password, profileData = {}) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error("Configuração do Supabase não definida.");
+    }
+
+    const response = await fetch(supabaseApiUrl("/auth/v1/signup"), {
+      method: "POST",
+      headers: getSupabaseHeaders(false),
+      body: JSON.stringify({ email, password })
+    });
+
+    const result = await response.json();
+    console.log("Supabase signup result:", result);
+    if (!response.ok) {
+      throw new Error(result.error_description || result.msg || result.error || "Falha ao cadastrar no Supabase.");
+    }
+
+    const authData = result.user ? result : (result.data || result);
+    if (!authData.user) {
+      throw new Error(authData.msg || authData.error || "Usuário não foi criado. Verifique as configurações do Supabase.");
+    }
+
+    if (!authData.access_token) {
+      alert("Cadastro criado. Confirme seu email e faça login para continuar.");
+      return;
+    }
+
+    supabaseSession = authData;
+    currentUser = authData.user;
+    saveSupabaseSession(authData);
+    updateHomeButtonsVisibility();
+    if (currentUser) {
+      await createUserProfile(profileData);
+      await loadUserProfile();
+    }
+    await loadPromptsFromSupabase();
+  }
+
+  async function createUserProfile(profileData) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const profile = {
+      id: currentUser.id,
+      nome: profileData.nome || "",
+      sobrenome: profileData.sobrenome || "",
+      data_nascimento: profileData.data_nascimento || null,
+      codigo_pais: profileData.codigo_pais || "",
+      numero_celular: profileData.numero_celular || ""
+    };
+
+    const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}`), {
+      method: "POST",
+      headers: {
+        ...getSupabaseHeaders(true),
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify([profile])
+    });
+
+    if (!response.ok) {
+      console.warn("Erro ao criar perfil no Supabase", await response.text());
+    }
+  }
+
+  async function updateUserProfile(profileData) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}?id=eq.${currentUser.id}`), {
+      method: "PATCH",
+      headers: {
+        ...getSupabaseHeaders(true),
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify(profileData)
+    });
+
+    if (!response.ok) {
+      console.warn("Erro ao atualizar perfil no Supabase", await response.text());
+    } else {
+      await loadUserProfile();
+    }
+  }
+
+  async function loadUserProfile() {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}?id=eq.${currentUser.id}&select=*`), {
+      headers: getSupabaseHeaders(true)
+    });
+
+    if (!response.ok) {
+      console.warn("Erro ao carregar perfil do Supabase", await response.text());
+      return;
+    }
+
+    const rows = await response.json();
+    currentProfile = rows[0] || null;
+    renderUserProfile();
+  }
+
+  function renderUserProfile() {
+    const userBox = document.querySelector('.user-box h2');
+    const nomeInput = document.getElementById('nome');
+    const sobrenomeInput = document.getElementById('sobrenome');
+    const nascimentoInput = document.getElementById('nascimento');
+    const telefoneInput = document.getElementById('telefone');
+
+    if (userBox) {
+      userBox.textContent = currentProfile ? `${currentProfile.nome || ''} ${currentProfile.sobrenome || ''}`.trim() : 'Usuário';
+    }
+    if (nomeInput) nomeInput.value = currentProfile?.nome || '';
+    if (sobrenomeInput) sobrenomeInput.value = currentProfile?.sobrenome || '';
+    if (nascimentoInput) nascimentoInput.value = currentProfile?.data_nascimento || '';
+    if (telefoneInput) telefoneInput.value = currentProfile?.numero_celular || '';
+  }
+
+  function updateHomeButtonsVisibility() {
+    const btnNovoPrompt = document.getElementById('novoPrompt');
+    const btnMeusPrompts = document.getElementById('meusPrompts');
+    const btnLogin = document.getElementById('login');
+
+    if (btnNovoPrompt) {
+      btnNovoPrompt.classList.toggle('hidden', !currentUser);
+    }
+    if (btnMeusPrompts) {
+      btnMeusPrompts.classList.toggle('hidden', !currentUser);
+    }
+    if (btnLogin) {
+      if (currentUser) {
+        btnLogin.textContent = 'Encerrar Sessão';
+        btnLogin.classList.add('btn-logout');
+      } else {
+        btnLogin.textContent = 'Login';
+        btnLogin.classList.remove('btn-logout');
+      }
+    }
+  }
+
+  async function logoutSupabase() {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      return;
+    }
+    clearSupabaseSession();
+    currentUser = null;
+    currentProfile = null;
+    updateHomeButtonsVisibility();
+    historyData = carregarHistorico();
+    renderizarHistorico();
+  }
+
+  async function loadPromptsFromSupabase() {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const url = supabaseApiUrl(`/rest/v1/${SUPABASE_PROMPTS_TABLE}?usuario_id=eq.${currentUser.id}&select=*&order=criado_em.desc`);
+    const response = await fetch(url, {
+      headers: getSupabaseHeaders(true)
+    });
+
+    if (!response.ok) {
+      console.warn("Erro ao carregar prompts do Supabase", await response.text());
+      return;
+    }
+
+    const rows = await response.json();
+    const remoteHistory = rows.map(row => ({
+      id: row.id,
+      text: row.prompt || row.text || "",
+      data: (SUPABASE_PROMPTS_DATA_COLUMN ? row[SUPABASE_PROMPTS_DATA_COLUMN] : row.data) || {},
+      createdAt: row.criado_em || row.created_at || new Date().toISOString(),
+      updatedAt: row.editado_em || row.updated_at || null
+    }));
+
+    const localHistory = carregarHistorico();
+    const remoteIds = new Set(remoteHistory.map(item => item.id));
+    const mergedHistory = [...remoteHistory];
+
+    localHistory.forEach(item => {
+      if (!remoteIds.has(item.id)) {
+        mergedHistory.push(item);
+      }
+    });
+
+    historyData = mergedHistory;
+    renderizarHistorico();
+  }
+
+  async function persistPromptToSupabase(prompt) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const payload = {
+      id: prompt.id,
+      usuario_id: currentUser.id,
+      prompt: prompt.text,
+      criado_em: prompt.createdAt,
+      editado_em: prompt.updatedAt || prompt.createdAt
+    };
+
+    if (prompt.data && Object.keys(prompt.data).length && SUPABASE_PROMPTS_DATA_COLUMN) {
+      payload[SUPABASE_PROMPTS_DATA_COLUMN] = prompt.data;
+    }
+
+    const url = supabaseApiUrl(`/rest/v1/${SUPABASE_PROMPTS_TABLE}`);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        ...getSupabaseHeaders(true),
+        Prefer: "resolution=merge-duplicates,return=minimal"
+      },
+      body: JSON.stringify([payload])
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.warn("Erro ao salvar prompt no Supabase", errorText);
+      alert(`Erro ao salvar no Supabase: ${errorText}`);
+    }
+  }
+
+  async function deletePromptFromSupabase(id) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !currentUser) {
+      return;
+    }
+
+    const url = supabaseApiUrl(`/rest/v1/${SUPABASE_PROMPTS_TABLE}?id=eq.${id}&usuario_id=eq.${currentUser.id}`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: getSupabaseHeaders(true)
+    });
+
+    if (!response.ok) {
+      console.warn("Erro ao excluir prompt no Supabase", await response.text());
+    }
+  }
+
+  function setPersistentTitle(title) {
+    const titleEl = document.getElementById("persistentTitle");
+    if (titleEl) {
+      titleEl.textContent = title;
+    }
+  }
+
+  function updateBackButtonVisibility() {
+    const backBtn = document.getElementById("headerBackBtn");
+    if (!backBtn) return;
+    backBtn.classList.toggle("hidden", currentScreen === "telaInicial");
+  }
+
+  function goBack() {
+    if (!screenHistory.length) {
+      mostrarTela("telaInicial", { replace: true });
+      return;
+    }
+    const previousScreen = screenHistory.pop();
+    mostrarTela(previousScreen, { replace: true });
+  }
+
+  function mostrarTela(telaId, options = {}) {
+    if (!options.replace && currentScreen && currentScreen !== telaId) {
+      screenHistory.push(currentScreen);
+    }
+
+    const allScreens = document.querySelectorAll(
       "#telaInicial, #checklist, #resultado, #login-screen, #cadastro-screen, #historico-screen, #visualizar-prompt-screen, #minha-conta, #editar-perfil, #ajuda-suporte, #fale-conosco, #politica-privacidade"
-    ).forEach(tela => tela.classList.add("hidden"));
+    );
+    allScreens.forEach(tela => tela.classList.add("hidden"));
 
-    document.getElementById(telaId).classList.remove("hidden");
+    const screen = document.getElementById(telaId);
+    if (screen) {
+      screen.classList.remove("hidden");
+    }
+
+    const titleMap = {
+      telaInicial: "Promptica",
+      checklist: "Criar Novo Prompt",
+      resultado: "Meu Prompt",
+      "login-screen": "Login",
+      "cadastro-screen": "Cadastro",
+      "historico-screen": "Meus Prompts",
+      "visualizar-prompt-screen": "Visualizar Prompt",
+      "minha-conta": "Minha Conta",
+      "editar-perfil": "Editar Perfil",
+      "ajuda-suporte": "Ajuda & Suporte",
+      "fale-conosco": "Fale Conosco",
+      "politica-privacidade": "Política de Privacidade"
+    };
+    setPersistentTitle(titleMap[telaId] || "Promptica");
+    currentScreen = telaId;
+    updateBackButtonVisibility();
   }
 
   function salvarHistorico(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function savePromptLocally(prompt) {
+    const index = historyData.findIndex(entry => entry.id === prompt.id);
+    if (index >= 0) {
+      historyData[index] = prompt;
+    } else {
+      historyData.push(prompt);
+    }
+    salvarHistorico(historyData);
+    renderizarHistorico();
   }
 
   function carregarHistorico() {
@@ -118,6 +521,9 @@ document.addEventListener("DOMContentLoaded", () => {
     historyData = historyData.filter(entry => entry.id !== id);
     salvarHistorico(historyData);
     renderizarHistorico();
+    if (currentUser) {
+      deletePromptFromSupabase(id).catch(error => console.warn("Erro ao excluir prompt no Supabase:", error));
+    }
   }
 
   function coletarCamposSelecionados() {
@@ -285,23 +691,53 @@ ${partes.join("\n\n")}
 
   historyData = carregarHistorico();
   renderizarHistorico();
+  initSupabase();
 
   // =====================================
   // BOTÕES DA TELA INICIAL
   // =====================================
   const btnNovoPrompt = document.getElementById("novoPrompt");
   if (btnNovoPrompt) {
-    btnNovoPrompt.addEventListener("click", () => mostrarTela("checklist"));
+    btnNovoPrompt.addEventListener("click", () => {
+      if (!currentUser) return;
+      mostrarTela("checklist");
+    });
   }
 
   const btnLogin = document.getElementById("login");
   if (btnLogin) {
-    btnLogin.addEventListener("click", () => mostrarTela("login-screen"));
+    btnLogin.addEventListener("click", async () => {
+      if (currentUser) {
+        await logoutSupabase();
+        mostrarTela("telaInicial", { replace: true });
+      } else {
+        mostrarTela("login-screen");
+      }
+    });
+  }
+
+  const profileBtn = document.getElementById("profileBtn");
+  if (profileBtn) {
+    profileBtn.addEventListener("click", () => {
+      if (currentUser) {
+        mostrarTela("minha-conta");
+      } else {
+        mostrarTela("login-screen");
+      }
+    });
+  }
+
+  const headerBackBtn = document.getElementById("headerBackBtn");
+  if (headerBackBtn) {
+    headerBackBtn.addEventListener("click", goBack);
   }
 
   const btnMeusPrompts = document.getElementById("meusPrompts");
   if (btnMeusPrompts) {
-    btnMeusPrompts.addEventListener("click", () => mostrarTela("historico-screen"));
+    btnMeusPrompts.addEventListener("click", () => {
+      if (!currentUser) return;
+      mostrarTela("historico-screen");
+    });
   }
 
   // =====================================
@@ -341,6 +777,98 @@ ${partes.join("\n\n")}
       mostrarTela("cadastro-screen");
     });
 
+  const btnSupabaseLogin = document.getElementById("btnLogin");
+  if (btnSupabaseLogin) {
+    btnSupabaseLogin.addEventListener("click", async () => {
+      const email = document.getElementById("email")?.value?.trim();
+      const password = document.getElementById("password")?.value?.trim();
+      if (!email || !password) {
+        alert("Preencha email e senha para fazer login.");
+        return;
+      }
+      try {
+        await signInSupabase(email, password);
+        alert("Login realizado com sucesso.");
+        mostrarTela("telaInicial");
+      } catch (error) {
+        alert(error.message || "Falha ao fazer login.");
+      }
+    });
+  }
+
+  const btnSupabaseCadastro = document.getElementById("btnCadastro");
+  if (btnSupabaseCadastro) {
+    const cadastroError = document.getElementById("cadastroError");
+    const fieldsToValidate = [
+      { id: "nomeCadastro", label: "Nome" },
+      { id: "sobrenomeCadastro", label: "Sobrenome" },
+      { id: "emailCadastro", label: "Email" },
+      { id: "senhaCadastro", label: "Senha" }
+    ];
+
+    fieldsToValidate.forEach(field => {
+      const input = document.getElementById(field.id);
+      if (input) {
+        input.addEventListener("input", () => {
+          input.classList.toggle("input-error", !input.value.trim());
+          if (cadastroError) cadastroError.classList.add("hidden");
+        });
+      }
+    });
+
+    btnSupabaseCadastro.addEventListener("click", async () => {
+      const email = document.getElementById("emailCadastro")?.value?.trim();
+      const password = document.getElementById("senhaCadastro")?.value?.trim();
+      const nome = document.getElementById("nomeCadastro")?.value?.trim();
+      const sobrenome = document.getElementById("sobrenomeCadastro")?.value?.trim();
+      const nascimento = document.getElementById("nascimentoCadastro")?.value?.trim();
+      const telefone = document.getElementById("telefoneCadastro")?.value?.trim();
+
+      let hasError = false;
+      fieldsToValidate.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (input) {
+          const invalid = !input.value.trim();
+          input.classList.toggle("input-error", invalid);
+          if (invalid) hasError = true;
+        }
+      });
+
+      if (hasError) {
+        if (cadastroError) {
+          cadastroError.textContent = "* Campos obrigatórios";
+          cadastroError.classList.remove("hidden");
+        }
+        return;
+      }
+
+      if (cadastroError) cadastroError.classList.add("hidden");
+
+      try {
+        await signUpSupabase(email, password, {
+          nome,
+          sobrenome,
+          data_nascimento: nascimento,
+          numero_celular: telefone,
+          codigo_pais: ""
+        });
+        alert("Cadastro realizado e sessão iniciada.");
+        mostrarTela("historico-screen");
+      } catch (error) {
+        alert(error.message || "Falha ao cadastrar.");
+      }
+    });
+  }
+
+  const btnLogout = document.getElementById("btnSair");
+  if (btnLogout) {
+    btnLogout.addEventListener("click", async () => {
+      await logoutSupabase();
+      alert("Sessão encerrada.");
+      mostrarTela("telaInicial");
+    });
+  }
+
   // =====================================
   // GERAR PROMPT
   // =====================================
@@ -362,11 +890,13 @@ ${partes.join("\n\n")}
 
       try {
         const resultText = await gerarPromptGemini(data);
+        const now = new Date().toISOString();
         currentPromptData = {
-          id: Date.now().toString(),
+          id: currentPromptData?.id || Date.now().toString(),
           text: resultText,
           data,
-          createdAt: new Date().toISOString()
+          createdAt: currentPromptData?.createdAt || now,
+          updatedAt: now
         };
         if (outputEl) {
           outputEl.innerText = resultText;
@@ -442,7 +972,7 @@ ${partes.join("\n\n")}
 
   const deletarSelecionados = document.getElementById("deletarSelecionados");
   if (deletarSelecionados) {
-    deletarSelecionados.addEventListener("click", () => {
+    deletarSelecionados.addEventListener("click", async () => {
       const selecionados = Array.from(document.querySelectorAll(".prompt-checkbox:checked")).map(cb => cb.dataset.id);
       if (!selecionados.length) {
         alert("Selecione ao menos um prompt para excluir.");
@@ -451,6 +981,9 @@ ${partes.join("\n\n")}
       historyData = historyData.filter(entry => !selecionados.includes(entry.id));
       salvarHistorico(historyData);
       renderizarHistorico();
+      if (currentUser) {
+        await Promise.all(selecionados.map(id => deletePromptFromSupabase(id).catch(error => console.warn("Erro ao excluir prompt no Supabase:", error))));
+      }
       if (selectAll) selectAll.checked = false;
     });
   }
@@ -467,9 +1000,14 @@ ${partes.join("\n\n")}
   if (salvarBtn) {
     salvarBtn.addEventListener("click", () => {
       if (!currentPromptData || !currentPromptData.text) return;
-      historyData.push(currentPromptData);
-      salvarHistorico(historyData);
-      renderizarHistorico();
+      if (!currentPromptData.createdAt) {
+        currentPromptData.createdAt = new Date().toISOString();
+      }
+      currentPromptData.updatedAt = new Date().toISOString();
+      savePromptLocally(currentPromptData);
+      if (currentUser) {
+        persistPromptToSupabase(currentPromptData).catch(error => console.warn("Erro ao salvar prompt no Supabase:", error));
+      }
       alert("Prompt salvo no histórico!");
     });
   }
@@ -528,6 +1066,34 @@ if (editarPerfilBtn) {
   });
 }
 
+const btnAtualizarPerfil = document.getElementById("btnAtualizarPerfil");
+if (btnAtualizarPerfil) {
+  btnAtualizarPerfil.addEventListener("click", async () => {
+    const nome = document.getElementById("nome")?.value?.trim();
+    const sobrenome = document.getElementById("sobrenome")?.value?.trim();
+    const nascimento = document.getElementById("nascimento")?.value?.trim();
+    const telefone = document.getElementById("telefone")?.value?.trim();
+
+    if (!currentUser) {
+      alert("Faça login para atualizar seu perfil.");
+      return;
+    }
+
+    try {
+      await updateUserProfile({
+        nome,
+        sobrenome,
+        data_nascimento: nascimento,
+        numero_celular: telefone
+      });
+      alert("Perfil atualizado com sucesso.");
+      mostrarTela("minha-conta");
+    } catch (error) {
+      console.warn(error);
+      alert("Falha ao atualizar o perfil.");
+    }
+  });
+}
 // Botão "Ajuda e Suporte"
 const ajudaSuporteBtn = document.getElementById("ajudaSuporteBtn");
 if (ajudaSuporteBtn) {
