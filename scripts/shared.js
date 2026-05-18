@@ -66,11 +66,99 @@ function getSupabaseHeaders(useAuth = true) {
     Accept: "application/json"
   };
   const session = getSupabaseSession();
-  if (useAuth && session && session.access_token) {
-    headers.Authorization = `Bearer ${session.access_token}`;
+  if (useAuth) {
+    if (session && session.access_token) {
+      headers.Authorization = `Bearer ${session.access_token}`;
+    } else {
+      headers.Authorization = `Bearer ${SUPABASE_ANON_KEY}`;
+    }
   }
   headers["Content-Type"] = "application/json";
   return headers;
+}
+
+async function ensureUserProfile(user) {
+  if (!user || !user.id) return null;
+
+  const profileId = user.id;
+  const profileResponse = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}?id=eq.${profileId}`), {
+    method: "GET",
+    headers: getSupabaseHeaders(true)
+  });
+
+  if (!profileResponse.ok) {
+    const errorText = await profileResponse.text();
+    throw new Error(`Falha ao verificar perfil: ${errorText}`);
+  }
+
+  const existing = await profileResponse.json();
+  if (Array.isArray(existing) && existing.length) {
+    return existing[0];
+  }
+
+  const profilePayload = { id: profileId };
+  if (user.email) profilePayload.email = user.email;
+  if (user.user_metadata?.nome) profilePayload.nome = user.user_metadata.nome;
+
+  const insertResponse = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}`), {
+    method: "POST",
+    headers: {
+      ...getSupabaseHeaders(true),
+      Prefer: "return=representation"
+    },
+    body: JSON.stringify(profilePayload)
+  });
+
+  if (!insertResponse.ok) {
+    const errorText = await insertResponse.text();
+    throw new Error(`Falha ao criar perfil: ${errorText}`);
+  }
+
+  const inserted = await insertResponse.json();
+  return Array.isArray(inserted) ? inserted[0] : inserted;
+}
+
+async function salvarPromptNaTabela(prompt) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error("Configuração Supabase ausente.");
+  }
+
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  if (!session || !userId) {
+    throw new Error("Usuário não autenticado. Faça login para salvar o prompt.");
+  }
+
+  await ensureUserProfile(session.user);
+
+  if (!prompt || !prompt.text) {
+    throw new Error("Prompt inválido para salvar.");
+  }
+
+  const table = SUPABASE_PROMPTS_TABLE;
+  const payload = {
+    prompt: prompt.text,
+    usuario_id: userId,
+    criado_em: prompt.createdAt || new Date().toISOString(),
+    editado_em: prompt.updatedAt || new Date().toISOString()
+  };
+
+  const response = await fetch(supabaseApiUrl(`/rest/v1/${table}`), {
+    method: "POST",
+    headers: {
+      ...getSupabaseHeaders(true),
+      Prefer: "return=representation"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const json = await response.json();
+  if (!response.ok) {
+    const message = json?.message || json?.error_description || JSON.stringify(json);
+    throw new Error(message || "Falha ao salvar prompt no Supabase.");
+  }
+
+  return json;
 }
 
 async function signInSupabase(email, password) {
@@ -349,6 +437,7 @@ if (typeof module !== 'undefined' && module.exports) {
     addPromptToHistory,
     removePromptFromHistory,
     removePromptsFromHistory,
+    salvarPromptNaTabela,
     carregarHistorico,
     buscarPromptPorId,
     gerarPromptGemini,

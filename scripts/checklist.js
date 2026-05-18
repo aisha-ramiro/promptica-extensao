@@ -2,21 +2,25 @@
 document.addEventListener("DOMContentLoaded", async () => {
   
   // =====================================
-  // RESTAURAR RASCUNHO DO STORAGE
+  // LIMPAR FORMULÁRIO AO ENTRAR
   // =====================================
-  const draftRaw = localStorage.getItem("draftPromptica");
-  if (draftRaw) {
-    const d = JSON.parse(draftRaw);
-    Object.keys(d).forEach(k => {
-      if (k.endsWith("Check")) {
-        const chk = document.getElementById(k);
-        if (chk) chk.checked = d[k];
-      } else {
-        const ta = document.getElementById(k);
-        if (ta) ta.value = d[k];
-      }
-    });
-  }
+  const campos = [
+    "instrucao",
+    "exemplo",
+    "contexto",
+    "restricoes",
+    "tom",
+    "saida",
+    "suporte"
+  ];
+
+  campos.forEach(campo => {
+    const el = document.getElementById(campo);
+    const chk = document.getElementById(`${campo}Check`);
+    if (el) el.value = "";
+    if (chk) chk.checked = false;
+  });
+  localStorage.removeItem("draftPromptica");
 
   // =====================================
   // NAVEGAÇÃO
@@ -85,14 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (criarPromptBtn) {
     criarPromptBtn.addEventListener("click", async () => {
       const data = coletarCampos();
-      
-      // Guardar rascunho
-      const draft = {};
-      Object.keys(data).forEach(k => {
-        draft[k] = document.getElementById(k)?.value || "";
-        draft[k + "Check"] = document.getElementById(k + "Check")?.checked || false;
-      });
-      localStorage.setItem("draftPromptica", JSON.stringify(draft));
 
       try {
         // Mostrar carregamento
@@ -115,6 +111,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
         localStorage.setItem("currentPrompt", JSON.stringify(promptObj));
         localStorage.setItem("promptGerado", resultText);
+        addPromptToHistory(resultText);
+
+        try {
+          await salvarPromptNaTabela(promptObj);
+        } catch (saveError) {
+          console.warn("Falha ao salvar prompt no Supabase:", saveError);
+          alert("Prompt gerado, mas não foi possível salvar no banco: " + saveError.message);
+        }
+
+        localStorage.removeItem("draftPromptica");
 
         // Navegar para resultado
         location.href = "resultado.html";
