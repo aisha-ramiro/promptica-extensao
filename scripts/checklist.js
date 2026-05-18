@@ -1,104 +1,128 @@
 // scripts/checklist.js
-document.addEventListener("DOMContentLoaded", () => {
-
+document.addEventListener("DOMContentLoaded", async () => {
+  
+  // =====================================
+  // RESTAURAR RASCUNHO DO STORAGE
+  // =====================================
   const draftRaw = localStorage.getItem("draftPromptica");
-if (draftRaw) {
-  const d = JSON.parse(draftRaw);
-  Object.keys(d).forEach(k => {
-    if (k.endsWith("Chk")) {
-      const chk = document.getElementById(k.replace("Chk","") + "Check");
-      if (chk) chk.checked = d[k];
-    } else {
-      const ta = document.getElementById(k);
-      if (ta)  ta.value = d[k];
+  if (draftRaw) {
+    const d = JSON.parse(draftRaw);
+    Object.keys(d).forEach(k => {
+      if (k.endsWith("Check")) {
+        const chk = document.getElementById(k);
+        if (chk) chk.checked = d[k];
+      } else {
+        const ta = document.getElementById(k);
+        if (ta) ta.value = d[k];
+      }
+    });
+  }
+
+  // =====================================
+  // NAVEGAÇÃO
+  // =====================================
+  const voltarHome = document.getElementById("voltarHome");
+  const userBtn = document.getElementById("userBtn");
+  
+  if (voltarHome) voltarHome.onclick = () => location.href = "home.html";
+  if (userBtn) userBtn.onclick = () => location.href = "usuario.html";
+
+  // =====================================
+  // ABRE/FECHA CARDS (ACORDEÃO)
+  // =====================================
+  document.querySelectorAll(".card").forEach(card => {
+    const head = card.querySelector(".card-head");
+    const toggle = card.querySelector(".toggle");
+    const info = card.querySelector(".info");
+    
+    if (info && card.dataset.info) {
+      info.setAttribute("data-tooltip", card.dataset.info);
+    }
+
+    if (head) {
+      head.addEventListener("click", e => {
+        if (e.target.tagName === "INPUT") return;
+        card.classList.toggle("open");
+        if (toggle) {
+          toggle.textContent = card.classList.contains("open") ? "▲" : "▼";
+        }
+      });
     }
   });
-}
 
-  /* ──────────── NAVEGAÇÃO ──────────── */
-  voltarHome.onclick = () => location.href = "home.html";
-  userBtn  .onclick = () => location.href = "usuario.html";
+  // =====================================
+  // COLETAR CAMPOS SELECIONADOS
+  // =====================================
+  function coletarCampos() {
+    const campos = {
+      contexto: "Contexto",
+      instrucao: "Instruções",
+      exemplo: "Exemplos",
+      restricoes: "Restrições",
+      tom: "Tom",
+      saida: "Saída esperada",
+      suporte: "Conteúdo adicional"
+    };
 
-  /* ──────────── ABRE/FECHA CARDS ──────────── */
-  document.querySelectorAll(".card").forEach(card => {
-    const head   = card.querySelector(".card-head");
-    const toggle = card.querySelector(".toggle");
-    const info   = card.querySelector(".info");
-    info.setAttribute("data-tooltip", card.dataset.info);
+    const data = {};
+    for (const campo in campos) {
+      const el = document.getElementById(campo);
+      const checkId = campo + "Check";
+      const checkbox = document.getElementById(checkId);
+      const checked = checkbox ? checkbox.checked : true;
+      const valor = el ? el.value.trim() : "";
+      
+      data[campo] = valor;
+    }
+    return data;
+  }
 
-    head.addEventListener("click", e => {
-      if (e.target.tagName === "INPUT") return;     // ignora clique no checkbox
-      card.classList.toggle("open");
-      toggle.textContent = card.classList.contains("open") ? "▲" : "▼";
-    });
-  });
-
-  /* ──────────── CRIAR PROMPT ──────────── */
+  // =====================================
+  // GERAR PROMPT
+  // =====================================
   const criarPromptBtn = document.getElementById("criarPrompt");
 
-  criarPromptBtn.onclick = () => {
+  if (criarPromptBtn) {
+    criarPromptBtn.addEventListener("click", async () => {
+      const data = coletarCampos();
+      
+      // Guardar rascunho
+      const draft = {};
+      Object.keys(data).forEach(k => {
+        draft[k] = document.getElementById(k)?.value || "";
+        draft[k + "Check"] = document.getElementById(k + "Check")?.checked || false;
+      });
+      localStorage.setItem("draftPromptica", JSON.stringify(draft));
 
-    /* helpers */
-    const valor   = id => document.getElementById(id).value.trim();
-    const marcado = id => document.getElementById(id + "Check").checked;
+      try {
+        // Mostrar carregamento
+        const loader = document.createElement("div");
+        loader.className = "loader";
+        loader.innerHTML = "Gerando prompt...";
+        criarPromptBtn.disabled = true;
+        criarPromptBtn.textContent = "Gerando...";
 
-    const papelIA = "especialista em comunicação clara";
-    const partes  = [];
+        // Gerar com Gemini
+        const resultText = await gerarPromptGemini(data);
+        
+        // Guardar resultado
+        const promptObj = {
+          id: Date.now().toString(),
+          text: resultText,
+          data: data,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem("currentPrompt", JSON.stringify(promptObj));
+        localStorage.setItem("promptGerado", resultText);
 
-    /* Contexto (vem antes da tarefa) */
-    if (marcado("contexto") && valor("contexto")) {
-      partes.push(
-        `Você é um(a) ${papelIA}, e está atuando em um cenário onde ${valor("contexto")}.`
-      );
-    }
-
-    /* Tarefa / instruções */
-    if (marcado("instrucao") && valor("instrucao")) {
-      partes.push(`Sua tarefa é ${valor("instrucao")}.`);
-    }
-
-    /* Exemplos */
-    if (marcado("exemplo") && valor("exemplo")) {
-      partes.push(
-`Considere os exemplos a seguir para entender o formato da resposta esperada:
-${valor("exemplo")}`
-      );
-    }
-
-    /* Conteúdo de suporte */
-    if (marcado("suporte") && valor("suporte")) {
-      partes.push(`Baseie sua resposta em ${valor("suporte")}.`);
-    }
-
-    /* Orientações de tom */
-    if (marcado("tom") && valor("tom")) {
-      partes.push(`Siga estas orientações: ${valor("tom")}.`);
-    }
-
-    /* Formato desejado */
-    if (marcado("saida") && valor("saida")) {
-      partes.push(`Sua resposta deve ser apresentada no seguinte formato: ${valor("saida")}.`);
-    }
-
-    /* Restrições */
-    if (marcado("restricoes") && valor("restricoes")) {
-      partes.push(`Atenha-se às seguintes limitações: ${valor("restricoes")}.`);
-    }
-
-    if (!partes.length) {
-      alert("Marque pelo menos um card e preencha o texto.");
-      return;
-    }
-
-    const promptFinal = partes.join("\n\n");   // junta com linha em branco
-    localStorage.setItem("promptGerado", promptFinal);
-    const draft = {};
-["instrucao","exemplo","contexto","restricoes","tom","saida","suporte"].forEach(id=>{
-  draft[id]       = valor(id);
-  draft[id+"Chk"] = marcado(id);
-});
-localStorage.setItem("draftPromptica", JSON.stringify(draft));
-
-location.href = "resultado.html";
-  };
+        // Navegar para resultado
+        location.href = "resultado.html";
+      } catch (error) {
+        alert("Erro ao gerar prompt: " + error.message);
+        criarPromptBtn.disabled = false;
+        criarPromptBtn.textContent = "Criar Prompt";
+      }
+    });
+  }
 });

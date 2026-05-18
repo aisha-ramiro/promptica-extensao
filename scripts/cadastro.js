@@ -1,25 +1,56 @@
 document.addEventListener("DOMContentLoaded", () => {
-  backLogin.onclick = () => history.back();
+  const backLogin = document.getElementById("backLogin");
+  const nome = document.getElementById("nome");
+  const sobrenome = document.getElementById("sobrenome");
+  const email = document.getElementById("email");
+  const nascimento = document.getElementById("nascimento");
+  const fone = document.getElementById("fone");
+  const senha = document.getElementById("senha");
+  const btnCadastrar = document.getElementById("btnCadastrar");
+  const msgObrig = document.getElementById("msgObrig");
 
-  const obrig = [nome, email, senha];
+  if (backLogin) {
+    backLogin.addEventListener("click", () => {
+      location.href = "login.html";
+    });
+  }
 
-  /* valida em tempo real */
-  obrig.forEach(inp=>{
-    inp.addEventListener("input",() => inp.classList.remove("erro"));
+  const obrigatorios = [nome, email, senha];
+  obrigatorios.forEach(input => {
+    if (input) {
+      input.addEventListener("input", () => input.classList.remove("erro"));
+    }
   });
 
-  btnCadastrar.onclick = () =>{
-    let ok = true;
-    obrig.forEach(inp=>{
-      if(!inp.value.trim()){ inp.classList.add("erro"); ok = false; }
-    });
+  if (btnCadastrar) {
+    btnCadastrar.addEventListener("click", async () => {
+      let formValido = true;
+      obrigatorios.forEach(input => {
+        if (input && !input.value.trim()) {
+          input.classList.add("erro");
+          formValido = false;
+        }
+      });
 
-    if(!ok){
-      msgObrig.classList.remove("hidden");
-      return;
-    }
-    msgObrig.classList.add("hidden");
-    alert("Cadastro (placeholder)");
-    location.href = "login.html";
-  };
+      if (!formValido) {
+        msgObrig?.classList.remove("hidden");
+        return;
+      }
+
+      msgObrig?.classList.add("hidden");
+
+      try {
+        await signUpSupabase(email.value.trim(), senha.value, {
+          nome: nome.value.trim(),
+          sobrenome: sobrenome.value.trim(),
+          nascimento: nascimento?.value || "",
+          telefone: fone?.value.trim() || ""
+        });
+        alert("Cadastro realizado com sucesso. Faça login.");
+        location.href = "login.html";
+      } catch (error) {
+        alert(error?.message || "Erro ao cadastrar. Tente novamente.");
+      }
+    });
+  }
 });
