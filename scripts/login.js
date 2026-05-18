@@ -41,10 +41,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
-  if (googleBtn) {
-    googleBtn.addEventListener("click", () => {
-      alert("Login com Google não está disponível neste modo. Use seu e-mail e senha.");
-    });
-  }
 });
