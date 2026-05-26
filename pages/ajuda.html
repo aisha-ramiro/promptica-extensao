@@ -1,9 +1,14 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8"><title>Ajuda e Suporte</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajuda e Suporte</title>
   <link rel="stylesheet" href="../styles/base.css">
   <link rel="stylesheet" href="../styles/ajuda.css">
 </head>
+
 <body>
   <header class="topbar">
     <button id="backConta" class="back-btn">&lt;</button>
@@ -11,14 +16,49 @@
     <button class="user-btn">User</button>
   </header>
 
-  <h3 class="sub">Perguntas Frequentes</h3>
+
   <div class="accordion">
-    <details open><summary>Pergunta</summary><p>Lorem ipsum dolor sit amet, consectetur.</p></details>
-    <details><summary>Pergunta</summary><p>Resposta curta.</p></details>
-    <details><summary>Pergunta</summary><p>Outra resposta…</p></details>
+    <h3 class="sub">Perguntas Frequentes</h3>
+
+    <details open>
+      <summary>1. O que é um prompt e por que ele é importante?</summary>
+      <p>Um prompt é a instrução que você fornece para uma Inteligência Artificial. Quanto mais claro, organizado e
+        detalhado for o prompt, melhores tendem a ser as respostas da IA.
+
+        O Promptica ajuda justamente nisso: organizar suas ideias em etapas simples, utilizando técnicas de engenharia
+        de prompt para melhorar os resultados gerados por ferramentas de IA..</p>
+    </details>
+    <details>
+      <summary>2. Preciso preencher todos os campos do checklist?</summary>
+      <p>Não. O checklist foi criado para ser flexível.
+
+        Você pode preencher apenas os campos necessários para sua tarefa. Os blocos não selecionados ou deixados em
+        branco são automaticamente removidos do resultado final do prompt.
+
+        Isso permite criar prompts simples ou extremamente detalhados, dependendo da necessidade.</p>
+    </details>
+    <details>
+      <summary>3. Meus prompts ficam salvos mesmo depois de fechar a extensão?</summary>
+      <p>Sim. O Promptica salva automaticamente seus prompts no armazenamento local do navegador.
+
+        Caso o usuário esteja logado, os prompts também podem ser sincronizados com armazenamento remoto, permitindo
+        recuperar informações futuramente.</p>
+    </details>
+
+        <details open>
+          <summary>1. 4. O Promptica gera respostas da IA automaticamente?</summary>
+          <p>O objetivo principal do Promptica é ajudar na construção de prompts melhores.
+
+            A extensão organiza, estrutura e melhora a forma como você escreve instruções para IA. Depois disso, o
+            prompt pode ser copiado e utilizado em plataformas como ChatGPT, Gemini, Claude ou outras ferramentas de
+            Inteligência Artificial.</p>
+        </details>
+
   </div>
 
   <script src="../config.js"></script>
   <script src="../scripts/shared.js"></script>
   <script src="../scripts/ajuda.js"></script>
-</body></html>
+</body>
+
+</html>

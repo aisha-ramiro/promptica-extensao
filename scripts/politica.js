@@ -1,1 +1,3 @@
-document.addEventListener("DOMContentLoaded",()=>backConta.onclick=()=>history.back());
+document.addEventListener("DOMContentLoaded",()=>{
+  backConta.onclick=()=>history.back();
+});
