@@ -3,6 +3,12 @@
 const STORAGE_KEY = "prompticaHistory";
 const SUPABASE_SESSION_KEY = "prompticaSupabaseSession";
 
+function getHistoryStorageKey() {
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  return userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY;
+}
+
 // Configurações
 const GEMINI_API_KEY = window.GEMINI_API_KEY || "";
 const SUPABASE_URL = window.SUPABASE_URL || "";
@@ -265,11 +271,11 @@ function removePromptsFromHistory(ids) {
 // =====================================
 
 function salvarHistorico(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(getHistoryStorageKey(), JSON.stringify(data));
 }
 
 function carregarHistorico() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  const raw = localStorage.getItem(getHistoryStorageKey());
   if (!raw) return [];
   try {
     return JSON.parse(raw);
