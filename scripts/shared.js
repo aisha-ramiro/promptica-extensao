@@ -112,6 +112,22 @@ function getSupabaseHeaders(useAuth = true) {
   return headers;
 }
 
+function normalizeProfileFields(source) {
+  if (!source || typeof source !== "object") return {
+    nome: "",
+    sobrenome: "",
+    data_nascimento: "",
+    numero_celular: ""
+  };
+
+  return {
+    nome: source.nome || source.name || source.full_name || source.given_name || source.first_name || "",
+    sobrenome: source.sobrenome || source.family_name || source.last_name || source.surname || "",
+    data_nascimento: source.data_nascimento || source.nascimento || source.birthdate || source.birthday || "",
+    numero_celular: source.numero_celular || source.telefone || source.phone || source.celular || source.mobile || source.cellphone || ""
+  };
+}
+
 async function ensureUserProfile(user) {
   if (!user || !user.id) return null;
 
@@ -131,13 +147,15 @@ async function ensureUserProfile(user) {
     return existing[0];
   }
 
+  const metadata = user.user_metadata || {};
+  const metadataFields = normalizeProfileFields(metadata);
   const profilePayload = {
     id: profileId,
     email: user.email || null,
-    nome: user.user_metadata?.nome || user.email || "",
-    sobrenome: user.user_metadata?.sobrenome || "",
-    data_nascimento: user.user_metadata?.nascimento || null,
-    numero_celular: user.user_metadata?.telefone || null
+    nome: metadataFields.nome || user.email || "",
+    sobrenome: metadataFields.sobrenome || "",
+    data_nascimento: metadataFields.data_nascimento || null,
+    numero_celular: metadataFields.numero_celular || null
   };
 
   const insertResponse = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}`), {

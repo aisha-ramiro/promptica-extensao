@@ -16,17 +16,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  await ensureUserProfile(session.user).catch(() => null);
   const profile = await buscarPerfilUsuario().catch(() => null);
   const metadata = session.user.user_metadata || {};
+  const profileFields = normalizeProfileFields(profile);
+  const metadataFields = normalizeProfileFields(metadata);
 
-  if (nomeInput) nomeInput.value = profile?.nome || metadata.nome || "";
-  if (sobrenomeInput) sobrenomeInput.value = profile?.sobrenome || metadata.sobrenome || "";
+  if (nomeInput) nomeInput.value = profileFields.nome || metadataFields.nome || "";
+  if (sobrenomeInput) sobrenomeInput.value = profileFields.sobrenome || metadataFields.sobrenome || "";
   if (emailInput) {
     emailInput.value = session.user.email || profile?.email || "";
     emailInput.readOnly = true;
   }
-  if (nascimentoInput) nascimentoInput.value = profile?.data_nascimento || metadata.nascimento || "";
-  if (celularInput) celularInput.value = profile?.numero_celular || metadata.telefone || "";
+  if (nascimentoInput) nascimentoInput.value = profileFields.data_nascimento || metadataFields.data_nascimento || "";
+  if (celularInput) celularInput.value = profileFields.numero_celular || metadataFields.numero_celular || "";
   if (senhaInput) senhaInput.value = "";
 
   if (!form) return;
