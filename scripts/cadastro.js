@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const obrigatorios = [nome, email, senha];
+  const obrigatorios = [nome, sobrenome, email, senha];
   obrigatorios.forEach(input => {
     if (input) {
       input.addEventListener("input", () => input.classList.remove("erro"));

@@ -96,9 +96,14 @@ async function ensureUserProfile(user) {
     return existing[0];
   }
 
-  const profilePayload = { id: profileId };
-  if (user.email) profilePayload.email = user.email;
-  if (user.user_metadata?.nome) profilePayload.nome = user.user_metadata.nome;
+  const profilePayload = {
+    id: profileId,
+    email: user.email || null,
+    nome: user.user_metadata?.nome || user.email || "",
+    sobrenome: user.user_metadata?.sobrenome || "",
+    data_nascimento: user.user_metadata?.nascimento || null,
+    numero_celular: user.user_metadata?.telefone || null
+  };
 
   const insertResponse = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}`), {
     method: "POST",
@@ -207,6 +212,9 @@ async function signUpSupabase(email, password, metadata = {}) {
 
   if (json.access_token) {
     saveSupabaseSession(json);
+    if (json.user) {
+      await ensureUserProfile(json.user);
+    }
   }
   return json;
 }

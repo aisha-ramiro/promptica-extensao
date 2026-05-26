@@ -10,17 +10,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const isLoggedIn = Boolean(session && session.access_token);
 
   if (novoPrompt) {
-    novoPrompt.disabled = !isLoggedIn;
-    novoPrompt.onclick = () => {
-      if (isLoggedIn) location.href = "checklist.html";
-    };
+    if (!isLoggedIn) {
+      novoPrompt.style.display = "none";
+    } else {
+      novoPrompt.onclick = () => location.href = "checklist.html";
+    }
   }
 
   if (meusPrompts) {
-    meusPrompts.disabled = !isLoggedIn;
-    meusPrompts.onclick = () => {
-      if (isLoggedIn) location.href = "historico.html";
-    };
+    if (!isLoggedIn) {
+      meusPrompts.style.display = "none";
+    } else {
+      meusPrompts.onclick = () => location.href = "historico.html";
+    }
   }
 
   if (login) {
