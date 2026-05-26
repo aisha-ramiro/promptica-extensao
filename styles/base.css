@@ -280,7 +280,6 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 350px;
   overflow-y: auto;
 }
 
@@ -288,9 +287,7 @@ textarea {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #333
 }
 
 .prompt-item input[type="checkbox"] {
@@ -333,13 +330,10 @@ textarea {
 
 /* Visualização Individual */
 .prompt-box {
-  background: #fff;
-  padding: 12px;
   border-radius: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 14px;
   max-height: 300px;
-  overflow-y: auto;
 }
 
 .prompt-toolbar {

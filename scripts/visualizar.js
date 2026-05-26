@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const btnVoltarTopo = document.getElementById("btnVoltarTopo");
   const userBtn = document.getElementById("userBtn");
   const copy = document.getElementById("btnCopiar");
@@ -18,8 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const selectedId = getSelectedPromptId();
-  const historico = carregarHistorico();
-  const item = historico.find(entry => entry.id === selectedId);
+  let item = carregarHistorico().find(entry => entry.id === selectedId);
+  if (!item && selectedId) {
+    item = await buscarPromptPorIdBanco(selectedId);
+  }
   const promptText = item?.text || localStorage.getItem("promptGerado") || "(vazio)";
   if (pre) pre.textContent = promptText;
 

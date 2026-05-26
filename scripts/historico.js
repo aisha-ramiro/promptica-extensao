@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const deleteSelected = document.getElementById("deleteSelected");
   const listaPrompts = document.getElementById("listaPrompts");
 
-  const renderHistorico = () => {
+  const renderHistorico = async () => {
     if (!listaPrompts) return;
-    const historico = carregarHistorico();
+    const historico = await carregarHistoricoUsuario();
     listaPrompts.innerHTML = "";
     if (selectAll) {
       selectAll.checked = false;

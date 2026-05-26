@@ -284,6 +284,80 @@ function buscarPromptPorId(id) {
   return data.find(entry => entry.id === id);
 }
 
+async function buscarPromptsDoUsuario() {
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  if (!userId) return [];
+
+  const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROMPTS_TABLE}?usuario_id=eq.${encodeURIComponent(userId)}&order=criado_em.desc`), {
+    method: "GET",
+    headers: getSupabaseHeaders(true)
+  });
+
+  if (!response.ok) {
+    console.warn("Falha ao carregar prompts do usuário:", await response.text());
+    return [];
+  }
+
+  const rows = await response.json();
+  if (!Array.isArray(rows)) return [];
+
+  return rows.map(item => ({
+    id: item.id?.toString() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    text: item.prompt || item.text || "",
+    createdAt: item.criado_em || item.createdAt || null,
+    updatedAt: item.editado_em || item.updatedAt || null,
+    source: "db"
+  }));
+}
+
+async function buscarPromptPorIdBanco(id) {
+  if (!id) return null;
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  if (!userId) return null;
+
+  const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROMPTS_TABLE}?id=eq.${encodeURIComponent(id)}&usuario_id=eq.${encodeURIComponent(userId)}`), {
+    method: "GET",
+    headers: getSupabaseHeaders(true)
+  });
+
+  if (!response.ok) {
+    console.warn("Falha ao buscar prompt por id:", await response.text());
+    return null;
+  }
+
+  const rows = await response.json();
+  if (!Array.isArray(rows) || !rows.length) return null;
+  const item = rows[0];
+  return {
+    id: item.id?.toString() || id,
+    text: item.prompt || item.text || "",
+    createdAt: item.criado_em || item.createdAt || null,
+    updatedAt: item.editado_em || item.updatedAt || null,
+    source: "db"
+  };
+}
+
+async function carregarHistoricoUsuario() {
+  const session = getSupabaseSession();
+  const local = carregarHistorico();
+  if (!session?.user?.id) return local;
+
+  const server = await buscarPromptsDoUsuario().catch(() => []);
+  if (!server.length) return local;
+
+  const textoExistente = new Set(server.map(item => item.text));
+  const merged = [...server];
+  for (const item of local) {
+    if (item.text && !textoExistente.has(item.text)) {
+      merged.push({ ...item, source: "local" });
+    }
+  }
+
+  return merged;
+}
+
 // =====================================
 // GEMINI - Geração de Prompts
 // =====================================
