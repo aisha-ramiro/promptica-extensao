@@ -129,6 +129,77 @@ async function ensureUserProfile(user) {
   return Array.isArray(inserted) ? inserted[0] : inserted;
 }
 
+async function buscarPerfilUsuario() {
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  if (!userId) return null;
+
+  const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}?id=eq.${encodeURIComponent(userId)}`), {
+    method: "GET",
+    headers: getSupabaseHeaders(true)
+  });
+
+  if (!response.ok) {
+    console.warn("Falha ao carregar perfil do usuário:", await response.text());
+    return null;
+  }
+
+  const rows = await response.json();
+  if (!Array.isArray(rows) || !rows.length) return null;
+  return rows[0];
+}
+
+async function atualizarPerfilUsuario(profileData) {
+  const session = getSupabaseSession();
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error("Usuário não autenticado.");
+  }
+
+  const payload = {
+    nome: profileData.nome || null,
+    sobrenome: profileData.sobrenome || null,
+    data_nascimento: profileData.data_nascimento || null,
+    numero_celular: profileData.numero_celular || null
+  };
+
+  const response = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}?id=eq.${encodeURIComponent(userId)}`), {
+    method: "PATCH",
+    headers: {
+      ...getSupabaseHeaders(true),
+      Prefer: "return=representation"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Falha ao atualizar perfil.");
+  }
+
+  const rows = await response.json();
+  if (Array.isArray(rows) && rows.length) {
+    return rows[0];
+  }
+
+  const insertResponse = await fetch(supabaseApiUrl(`/rest/v1/${SUPABASE_PROFILES_TABLE}`), {
+    method: "POST",
+    headers: {
+      ...getSupabaseHeaders(true),
+      Prefer: "return=representation"
+    },
+    body: JSON.stringify({ id: userId, ...payload })
+  });
+
+  if (!insertResponse.ok) {
+    const errorText = await insertResponse.text();
+    throw new Error(errorText || "Falha ao criar perfil.");
+  }
+
+  const inserted = await insertResponse.json();
+  return Array.isArray(inserted) ? inserted[0] : inserted;
+}
+
 async function salvarPromptNaTabela(prompt) {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     throw new Error("Configuração Supabase ausente.");

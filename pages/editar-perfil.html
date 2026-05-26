@@ -8,19 +8,19 @@
   <header class="topbar">
     <button id="backConta" class="back-btn">&lt;</button>
     <h1 class="title">Editar Perfil</h1>
-    <button class="user-btn">User</button>
+
   </header>
 
   <form class="form-box">
     <div class="row2">
-      <div><label>Nome</label><input value="Joao"></div>
-      <div><label>Sobrenome</label><input value="Souza"></div>
+      <div><label>Nome</label><input id="nomeInput" type="text" placeholder="Digite seu nome"></div>
+      <div><label>Sobrenome</label><input id="sobrenomeInput" type="text" placeholder="Digite seu sobrenome"></div>
     </div>
-    <label>E-mail</label><input type="email" value="joaosouza@gmail.com">
-    <label>Data de Nascimento</label><input type="date" value="2000-03-18">
-    <label>Celular</label><input value="(11) 99999-9999">
-    <label>Senha</label><input type="password" value="********">
-    <button class="primary-btn">Atualizar</button>
+    <label>E-mail</label><input id="emailInput" type="email" placeholder="Seu e-mail" readonly>
+    <label>Data de Nascimento</label><input id="nascimentoInput" type="date">
+    <label>Celular</label><input id="celularInput" type="text" placeholder="(11) 99999-9999">
+    <label>Senha</label><input id="senhaInput" type="password" placeholder="Nova senha">
+    <button type="submit" class="primary-btn">Atualizar</button>
   </form>
 
   <script src="../config.js"></script>
