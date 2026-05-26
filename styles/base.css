@@ -51,7 +51,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: #F2F6FF;
   margin: 0;
-  min-height: 100vh;
+  min-height: 620px;
   display: flex;
   justify-content: center;
   align-items: center;
