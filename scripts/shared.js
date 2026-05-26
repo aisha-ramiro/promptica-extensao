@@ -16,6 +16,9 @@ const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
 const SUPABASE_PROMPTS_TABLE = window.SUPABASE_PROMPTS_TABLE || "prompts";
 const SUPABASE_PROMPTS_DATA_COLUMN = window.SUPABASE_PROMPTS_DATA_COLUMN || "";
 const SUPABASE_PROFILES_TABLE = window.SUPABASE_PROFILES_TABLE || "profiles";
+const THEME_STORAGE_KEY = "prompticaTheme";
+const THEME_LIGHT = "light";
+const THEME_DARK = "dark";
 
 const PRIMARY_MODEL = "gemini-3-flash-preview";
 const FALLBACK_MODEL = "gemini-2.5-flash-lite";
@@ -65,6 +68,32 @@ function saveSupabaseSession(session) {
 function clearSupabaseSession() {
   localStorage.removeItem(SUPABASE_SESSION_KEY);
 }
+
+function getSavedTheme() {
+  return localStorage.getItem(THEME_STORAGE_KEY) || THEME_LIGHT;
+}
+
+function saveTheme(theme) {
+  localStorage.setItem(THEME_STORAGE_KEY, theme);
+}
+
+function applyTheme(theme) {
+  if (!document.body) return;
+  document.body.classList.toggle("dark-mode", theme === THEME_DARK);
+}
+
+function toggleTheme() {
+  const nextTheme = getSavedTheme() === THEME_DARK ? THEME_LIGHT : THEME_DARK;
+  saveTheme(nextTheme);
+  applyTheme(nextTheme);
+  return nextTheme;
+}
+
+function initTheme() {
+  applyTheme(getSavedTheme());
+}
+
+initTheme();
 
 function getSupabaseHeaders(useAuth = true) {
   const headers = {

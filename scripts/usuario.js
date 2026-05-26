@@ -12,6 +12,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (goFale) goFale.addEventListener("click", () => location.href = "fale.html");
   if (goPolitica) goPolitica.addEventListener("click", () => location.href = "politica.html");
 
+  const themeToggle = document.getElementById("themeToggle");
+  const themeToggleLabel = themeToggle?.querySelector("em");
+
+  const updateThemeLabel = (theme) => {
+    if (!themeToggleLabel) return;
+    themeToggleLabel.textContent = theme === THEME_DARK ? "Escuro" : "Claro";
+  };
+
+  if (themeToggle) {
+    updateThemeLabel(getSavedTheme());
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = toggleTheme();
+      updateThemeLabel(nextTheme);
+    });
+  }
+
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       signOutSupabase();

@@ -29,8 +29,8 @@
   align-items:center;
   gap:12px;
 
-  background:#fff;
-  border-bottom:1px solid #ddd;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
 
   padding:0 12px;
 
@@ -52,8 +52,8 @@
 }
 
 .user-btn{
-  background:#fff;
-  color:#fff;
+  background:var(--button-bg);
+  color:var(--button-text);
   border:0;
   border-radius:6px;
   padding:6px 14px;
@@ -150,6 +150,17 @@
   font-size:14px;
 
   cursor:pointer;
+
+  color:#000 !important;
+}
+
+.toggle{
+  color:#000 !important;
+}
+
+body.dark-mode .card-head label,
+body.dark-mode .card-head .toggle {
+  color:#000 !important;
 }
 
 .card-head input{
@@ -248,7 +259,7 @@
 
   min-height:100px;
 
-  border:1px solid rgba(0,0,0,.1);
+  border:1px solid var(--border);
 
   border-radius:8px;
 
@@ -260,13 +271,19 @@
 
   font-size:14px;
 
-  background:rgba(255,255,255,.7);
+  background:var(--surface);
+
+  color:var(--text);
 
   box-sizing:border-box;
 
   outline:none;
 
   transition:.2s ease;
+}
+
+.card-body textarea::placeholder{
+  color: var(--text-muted);
 }
 
 .card-body textarea:focus{
@@ -288,6 +305,7 @@
   font-size:15px;
 
   background:var(--btn-blue);
+  color:#000 !important;
 
   border:0;
 
@@ -298,6 +316,10 @@
   transition:.2s ease;
 
   box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+body.dark-mode .primary-btn{
+  color:#000 !important;
 }
 
 .primary-btn:hover{

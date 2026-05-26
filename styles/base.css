@@ -5,7 +5,7 @@ html,body{
   padding:0;
   overflow:hidden;           /* ❱❱ remove qualquer rolagem do popup */
   font-family:system-ui;
-  background:#f5f5fa;
+  background: var(--bg);
   box-sizing:border-box;
 }
 
@@ -17,10 +17,95 @@ html,body{
   --btn-purple: #e7daff;   /* Meus Prompts */
   --btn-pink:   #f3daff;   /* Login / genérica */
 
+  /* estado Claro */
+  --bg: #f5f5fa;
+  --surface: #ffffff;
+  --surface-muted: #f7f8ff;
+  --text: #161f3d;
+  --text-muted: #5f6d8e;
+  --border: #dddddd;
+  --button-bg: #ffffff;
+  --button-text: #161f3d;
+  --button-hover: #f0f0f0;
+  --logout-bg: #4f6bff;
+
   /* extras futuros */
   --btn-green:  #ade466;
   --btn-yellow: #ffda68;
   --btn-lilac:  #ddcbff;
+}
+
+body.dark-mode {
+  --bg: #11131d;
+  --surface: #171a2c;
+  --surface-muted: #1f233d;
+  --text: #f4f6ff;
+  --text-muted: #a3b0ff;
+  --border: #2c3143;
+  --button-bg: #232741;
+  --button-text: #f4f6ff;
+  --button-hover: #2f3452;
+  --logout-bg: #5f7cff;
+}
+
+body.dark-mode,
+body.dark-mode html {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+body.dark-mode .topbar,
+body.dark-mode .menu button,
+body.dark-mode .list-wrapper,
+body.dark-mode .prompt-list,
+body.dark-mode .card-body,
+body.dark-mode .help,
+body.dark-mode .user-btn,
+body.dark-mode .back-btn {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+body.dark-mode .prompt-item .preview,
+body.dark-mode .card-body textarea,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+body.dark-mode ::placeholder {
+  color: var(--text-muted) !important;
+}
+
+body.dark-mode .links a,
+body.dark-mode .title,
+body.dark-mode .card-head label,
+body.dark-mode .toggle,
+body.dark-mode .help,
+body.dark-mode .logo,
+body.dark-mode .menu em,
+body.dark-mode .card-head input {
+  color: var(--text) !important;
+}
+
+body.dark-mode .topbar img {
+  filter: invert(1) brightness(1.3) !important;
+}
+
+body.dark-mode .toolbar .icon-btn img,
+body.dark-mode .prompt-box img,
+body.dark-mode .card-body img,
+body.dark-mode .list-wrapper img,
+body.dark-mode .menu img {
+  filter: none !important;
+}
+
+body.dark-mode button {
+  color: var(--text) !important;
 }
 
 .toast{
@@ -49,7 +134,8 @@ html,body{
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #F2F6FF;
+  background: var(--bg);
+  color: var(--text);
   margin: 0;
   min-height: 620px;
   display: flex;

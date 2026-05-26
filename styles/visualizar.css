@@ -18,9 +18,10 @@
 }
 .prompt-box{
   width:100%;height:100%;
-  background:#fff;border:2px solid #ccc;border-radius:6px;
+  background:var(--surface);border:2px solid var(--border);border-radius:6px;
   padding:16px;box-sizing:border-box;
   overflow:auto;font-size:14px;white-space:pre-wrap;
+  color:var(--text);
 }
 
 /* ---------- TOOLBAR ---------- */
@@ -32,7 +33,15 @@
   width:60px;height:60px;border:0;border-radius:12px;cursor:pointer;
   font-size:28px;line-height:60px;text-align:center;color:#000;
 }
-.icon-btn.blue   {background:var(--btn-blue);}
+..icon-btn.blue   {background:var(--btn-blue);}
 .icon-btn.purple {background:var(--btn-purple);}
 .icon-btn.pink   {background:var(--btn-pink);}
 .icon-btn.peach  {background:var(--btn-peach);}  /* já definido em checklist */
+
+.icon-btn.peach img{
+  filter: invert(1) !important;
+}
+
+body.dark-mode .toolbar .icon-btn.peach img {
+  filter: invert(1) !important;
+}
